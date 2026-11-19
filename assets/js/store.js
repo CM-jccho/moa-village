@@ -23,6 +23,12 @@
     weather: 'auto',
     coins: 160,
     sparks: 0,
+    xp: 0,
+    vip: false,
+    trial: false,
+    missionsDone: 0,
+    bestStars: 0,
+    previewSeen: [],
     nickname: '',
     code: makeCode(),
     village: 'snowbell',
@@ -68,6 +74,10 @@
           if (!Array.isArray(this.state.friends)) this.state.friends = [];
           if (!Array.isArray(this.state.inbox)) this.state.inbox = [];
           if (!Array.isArray(this.state.claimed)) this.state.claimed = [];
+          if (!Array.isArray(this.state.previewSeen)) this.state.previewSeen = [];
+          if (typeof this.state.xp !== 'number') this.state.xp = 0;
+          if (typeof this.state.missionsDone !== 'number') this.state.missionsDone = 0;
+          if (typeof this.state.vip !== 'boolean') this.state.vip = false;
           if (!this.state.inv) this.state.inv = {};
         } catch (e) { this.state = DEFAULT(); }
       }
@@ -113,6 +123,19 @@
       this.save(); this.emit('coins', { n });
       return this.state.coins;
     },
+    /* mission / world reward — VIP members earn double coins */
+    reward(n) {
+      const coins = Math.round(n * (this.state.vip ? 2 : 1));
+      this.addCoins(coins);
+      return coins;
+    },
+    addXp(n) {
+      this.state.xp = Math.max(0, (this.state.xp || 0) + n);
+      this.save(); this.emit('xp', { n });
+      return this.state.xp;
+    },
+    level() { return 1 + Math.floor((this.state.xp || 0) / 300); },
+    xpInLevel() { return (this.state.xp || 0) % 300; },
     spend(n) {
       if (this.state.coins < n) return false;
       this.state.coins -= n; this.save(); this.emit('coins', { n: -n });
@@ -297,6 +320,31 @@
       if (c.unlocked && !was) this.emit('coopUnlock');
     },
 
+    /* ---------- vehicles (v2 open world) ---------- */
+    hasVehicle(id) {
+      if (id === 'minicar') return true;
+      if (id === 'supercar' || id === 'sleigh') return this.hasRide(id);
+      return this.hasRide(id);
+    },
+    unlockRide(id) {
+      if (this.state.rides.indexOf(id) < 0) this.state.rides.push(id);
+      if (this.state.activeRides.indexOf(id) < 0 && this.state.activeRides.length < 3) this.state.activeRides.push(id);
+      this.emit('ride', { id });
+    },
+    unlockPet(id) {
+      if (this.state.pets.indexOf(id) < 0) this.state.pets.push(id);
+      if (this.state.activePets.indexOf(id) < 0 && this.state.activePets.length < 3) this.state.activePets.push(id);
+      this.emit('pet', { id });
+    },
+    applyPerk(p) {
+      if (p === 'perk.supercar') this.unlockRide('supercar');
+      else if (p === 'perk.sleigh') this.unlockRide('sleigh');
+      else if (p === 'perk.rabbit') this.unlockPet('moonrabbit');
+      else if (p === 'perk.coins2') this.state.vip = true;
+      else if (p === 'perk.viporn') this.grant(['kite', 'gbell']);
+      else if (p === 'perk.trial') this.state.trial = true;
+    },
+
     /* ---------- serial codes ---------- */
     redeem(code) {
       const r = C().RAPID.byCode(code);
@@ -308,19 +356,26 @@
       this.grant(items);
       const pets = [];
       const rides = [];
-      if (r.set) {
-        (r.set.pets || []).forEach(id => {
-          if (!this.hasPet(id)) { this.state.pets.push(id); pets.push(id); }
-          if (this.state.activePets.indexOf(id) < 0 && this.state.activePets.length < 3) this.state.activePets.push(id);
-        });
-        (r.set.rides || []).forEach(id => {
-          if (!this.hasRide(id)) { this.state.rides.push(id); rides.push(id); }
-          if (this.state.activeRides.indexOf(id) < 0 && this.state.activeRides.length < 3) this.state.activeRides.push(id);
-        });
-      }
+      const addPet = (id) => {
+        if (!this.hasPet(id)) { this.state.pets.push(id); pets.push(id); }
+        if (this.state.activePets.indexOf(id) < 0 && this.state.activePets.length < 3) this.state.activePets.push(id);
+      };
+      const addRide = (id) => {
+        if (!this.hasRide(id)) { this.state.rides.push(id); rides.push(id); }
+        if (this.state.activeRides.indexOf(id) < 0 && this.state.activeRides.length < 3) this.state.activeRides.push(id);
+      };
+      ((r.set && r.set.pets) || []).forEach(addPet);
+      ((r.set && r.set.rides) || []).forEach(addRide);
+      (r.pets || []).forEach(addPet);
+      (r.rides || []).forEach(addRide);
+      (r.perks || []).forEach(p => this.applyPerk(p));
       this.save();
       this.emit('pet', {}); this.emit('ride', {});
-      return { ok: true, items, pets, rides, set: r.set || null, trial: !!r.trial, name: r.set ? C().setName(r.set) : null };
+      return {
+        ok: true, items, pets, rides, set: r.set || null, trial: !!r.trial, creator: !!r.creator,
+        perks: r.perks || [], url: r.url || null,
+        name: r.set ? C().setName(r.set) : null
+      };
     },
 
     /* ---------- gifts ---------- */

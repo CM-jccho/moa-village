@@ -1,15 +1,20 @@
-/* MOA Village — UI: HUD, sheets, shop, decorate, friends, gifts, Rapid */
+/* MOA Village v2 — UI: HUD, radar, world missions, shop, decorate, friends, Rapid */
 (function () {
   'use strict';
   window.MV = window.MV || {};
   const C = () => MV.Catalog;
   const S = () => MV.Store;
   const t = (k, v) => MV.t(k, v);
+  const RAPID_URL = 'https://www.latpeed.com/products/VTtxq';
 
   const $ = (sel) => document.querySelector(sel);
   const $$ = (sel) => Array.prototype.slice.call(document.querySelectorAll(sel));
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const fmt = (n) => Number(n || 0).toLocaleString();
+  const mmss = (s) => {
+    s = Math.max(0, Math.ceil(s));
+    return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+  };
 
   const UI = {
     scene: null,
@@ -17,7 +22,14 @@
     pendingMove: null,
     giftDraft: null,
     trend: { items: [], generatedAt: 0 },
-    history: [],
+    mission: null,
+    promo: null,
+    mapOpen: false,
+    waypoint: null,
+    lastMini: 0,
+    lastSpeed: 0,
+    lastPrompt: 0,
+    stars: 0,
 
     init() {
       this.bind();
@@ -25,10 +37,13 @@
       this.updateHud();
       this.renderTrend();
       this.bindScene();
+      this.bindMissions();
+      this.bindWorld();
       this.tipTimer();
+      this.updateStars(this.stars, false);
     },
 
-    /* ---------------- static text & language ---------------- */
+    /* ================= static text & language ================= */
     applyStatic() {
       $$('[data-i18n]').forEach(el => {
         const k = el.getAttribute('data-i18n');
@@ -40,8 +55,12 @@
       this.updateWeatherLabels();
       this.updateVillageChip();
       this.updateDockLabels();
-      document.title = 'MOA Village';
+      this.updateHud();
+      this.renderMissionHud(true);
+      this.renderLegend();
       if (this.sheetName) this.openSheet(this.sheetName, this._sheetOpts, true);
+      if (this.mapOpen) this.drawFullMap();
+      document.title = 'MOA Village';
     },
 
     updateDockLabels() {
@@ -71,10 +90,24 @@
     updateHud() {
       $('#coinCount').textContent = fmt(S().state.coins);
       $('#sparkCount').textContent = fmt(S().state.sparks);
+      $('#levelNum').textContent = S().level();
+      $('#vipBadgeCard').hidden = !S().state.vip;
       this.updateVillageChip();
     },
 
-    /* ---------------- events ---------------- */
+    updateStars(n, animate) {
+      this.stars = n;
+      $$('#stars i').forEach(el => {
+        const i = Number(el.dataset.i);
+        const on = i <= n;
+        if (on && !el.classList.contains('on')) {
+          el.classList.add('on');
+          if (animate) { el.classList.remove('hit'); void el.offsetWidth; el.classList.add('hit'); }
+        } else if (!on) el.classList.remove('on');
+      });
+    },
+
+    /* ================= events ================= */
     bind() {
       $('#langSeg').addEventListener('click', (e) => {
         const b = e.target.closest('button');
@@ -83,8 +116,8 @@
         S().state.lang = b.dataset.lang;
         S().save();
         this.applyStatic();
-        this.updateHud();
         this.renderTrend();
+        if (this.scene) this.scene.emit('district', { id: this.scene.lastDistrict, key: 'dist.' + this.scene.lastDistrict, first: true });
         this.toast(t('toast.lang'));
       });
 
@@ -119,25 +152,29 @@
       $('#scrim').addEventListener('click', () => this.closeSheet());
       $('#modalScrim').addEventListener('click', () => this.closeModal());
       document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') { this.closeModal(); this.closeSheet(); $('#weatherBar').classList.remove('open'); }
+        if (e.key === 'Escape') { this.closeModal(); this.closeSheet(); $('#weatherBar').classList.remove('open'); this.closeMap(); }
       });
 
       $('#villageChip').addEventListener('click', () => this.openSheet('villages'));
+      $('#levelChip').addEventListener('click', () => this.profileModal());
       $('#coinChip').addEventListener('click', () => this.openSheet('shop'));
       $('#sparkChip').addEventListener('click', () => this.openSheet('shop'));
       $('#trendStrip').addEventListener('click', () => this.openSheet('shop', { tab: 'orn' }));
+      $('#serialBtn').addEventListener('click', () => this.openSerial());
+      $('#stars').addEventListener('click', () => this.hypeModal());
 
       S().on((type, data) => {
         this.updateHud();
-        if (type === 'coins' || type === 'buy' || type === 'inventory' || type === 'friend' || type === 'coop' || type === 'giftSent') {
+        if (type === 'coins' || type === 'buy' || type === 'inventory' || type === 'friend' || type === 'coop' || type === 'giftSent' || type === 'xp') {
           if (this.sheetName) this.openSheet(this.sheetName, this._sheetOpts, true);
         }
         if (type === 'village') { this.scene.setVillage(C().village(data.id)); this.updateVillageChip(); }
         if (type === 'villageUnlock') { this.updateHud(); }
         if (type === 'deco') { this.scene.refreshPlacements(); }
         if (type === 'pet') this.scene.syncPets(false);
-        if (type === 'ride') this.scene.syncRides(false);
+        if (type === 'ride') this.scene.spawnVehicles();
         if (type === 'giftReceived') this.scene.refreshPlacements();
+        if (type === 'coopUnlock') { this.toast(t('friends.rapidBanner')); this.confetti(24); }
       });
     },
 
@@ -166,39 +203,482 @@
           this.toast(t('decorate.moved'));
           return;
         }
-        sc.avatar.tx = nx; sc.avatar.ty = ny;
+        sc.walkTo(nx, ny);
       });
-      sc.on('onSparkle', (index, h) => {
-        const gp = sc.collectSparkle(index);
-        S().addCoins(3);
-        S().addSparks(1);
-        this.burstScreen(gp ? gp.x : h.x, gp ? gp.y : h.y);
+      sc.on('onSparkle', (h) => {
+        const s = h.ref;
+        if (s) s.dead = true;
+        S().addCoins(3); S().addSparks(1);
+        this.burstScreen(h.sx, h.sy);
+        this.updateHud();
+      });
+      sc.on('onSparkleAuto', (s) => {
+        S().addCoins(3); S().addSparks(1);
+        const p = sc.worldToScreen(s.x, s.y);
+        this.burstScreen(p.x, p.y);
         this.updateHud();
       });
       sc.on('onPet', (id, h) => {
-        const key = 'petline-' + id;
         this._petLine = this._petLine || {};
         const i = this._petLine[id] = ((this._petLine[id] == null) ? 0 : this._petLine[id] + 1);
-        this.bubble(MV.I18n.petLine(id, i), h.x, h.y - h.r * .6);
+        this.bubble(MV.I18n.petLine(id, i), h.sx, h.sy - 8);
+      });
+      sc.on('onNpc', (id, h) => {
+        this._npcLine = this._npcLine || {};
+        const i = this._npcLine[id] = ((this._npcLine[id] == null) ? 0 : this._npcLine[id] + 1);
+        this.bubble(MV.I18n.npcLine(i), h.sx, h.sy - 8);
       });
       sc.on('onRide', (id, h) => {
         this._rideLine = this._rideLine || {};
         const i = this._rideLine[id] = ((this._rideLine[id] == null) ? 0 : this._rideLine[id] + 1);
-        this.bubble(MV.I18n.rideLine(id, i), h.x, h.y - h.r * .4);
+        this.bubble(MV.I18n.rideLine(id, i), h.sx, h.sy - 6);
       });
       sc.on('onOrnament', (uid) => this.ornamentMenu(uid));
-      sc.on('onHouse', () => this.openSheet('shop'));
+      sc.on('onBuilding', (h) => this.buildingAction(h.interact));
+      sc.on('onVehicleTap', (id) => {
+        const v = sc.vehicles.find(x => x.id === id);
+        if (v && Math.hypot(v.x - sc.avatar.x, v.y - sc.avatar.y) < 150) sc.enterVehicle(v);
+        else this.toast(t('veh.tooFar'));
+      });
       sc.on('onMoved', () => { if (this.sheetName === 'decorate') this.openSheet('decorate', this._sheetOpts, true); });
+      sc.on('district', (d) => this.showDistrict(d));
+      sc.on('vehicle', (v) => this.onVehicle(v));
+      sc.on('testdrive:end', () => this.testDriveEnd());
+      sc.on('mapToggle', () => this.toggleMap());
+      sc.on('frameEnd', () => this.frameTick());
+      sc.on('vehicleHint', () => {});
     },
 
-    /* ---------------- toast / bubble / fx ---------------- */
+    buildingAction(kind) {
+      if (kind === 'showroom') this.showroomModal();
+      else if (kind === 'rapid') this.openSerial();
+      else if (kind === 'decorate') this.openSheet('decorate');
+      else if (kind === 'villages') this.openSheet('villages');
+      else this.openSheet('shop');
+    },
+
+    /* ================= missions ================= */
+    bindMissions() {
+      const M = MV.Missions;
+      if (!M) return;
+      M.init(this.scene);
+      M.on('start', (o) => { this.mission = o; this.renderMissionHud(); this.toast(t('mis.started', { name: t(o.titleKey) })); });
+      M.on('objective', (o) => { this.mission = o; this.renderMissionHud(); });
+      M.on('tick', (o) => { this.mission = o; });
+      M.on('complete', (p) => this.missionComplete(p));
+      M.on('expire', () => { this.mission = null; this.renderMissionHud(); this.toast(t('mis.expired')); });
+      M.on('star', (p) => this.onStar(p));
+      M.on('preview', (p) => this.showPromo(p));
+    },
+
+    missionComplete(p) {
+      this.confetti(46);
+      this.burstScreen(window.innerWidth / 2, window.innerHeight * .42);
+      const name = t('mis.' + p.type);
+      const extra = p.bonus && p.bonus.kind === 'orn' ? ' + ' + MV.I18n.itemName(p.bonus.id) : '';
+      this.toast(t('mis.completed', { name, coins: fmt(p.coins), xp: p.xp }) + extra, 3200);
+      this.bubble('★ ' + t('mis.starUp'), window.innerWidth / 2, window.innerHeight * .5);
+      if (p.level && S().level() > (this._lastLevel || 1)) {
+        this._lastLevel = S().level();
+        setTimeout(() => this.toast(t('mis.levelUp', { n: S().level() })), 900);
+      }
+    },
+
+    onStar(p) {
+      this.updateStars(p.stars, p.up);
+      if (p.up && p.stars >= 2) {
+        this.scene.pops.push({ x: this.scene.avatar.x + 20, y: this.scene.avatar.y - 70, text: '★'.repeat(p.stars), life: 1.5 });
+        const lines = ['npc.star1', 'npc.star2', 'npc.star3', 'npc.star4', 'npc.star5'];
+        const key = lines[Math.min(4, p.stars - 1)];
+        this.toast(t(key), 2000);
+      }
+    },
+
+    renderMissionHud(force) {
+      const el = $('#missionHud');
+      const o = this.mission;
+      if (!o) { el.hidden = true; return; }
+      el.hidden = false;
+      $('#mhIco').textContent = o.icon || '!';
+      $('#mhTitle').textContent = t(o.titleKey);
+      $('#mhSub').textContent = t(o.subKey);
+      $('#mhDist').textContent = o.dist + 'm';
+      $('#mhTime').textContent = mmss(o.t);
+      const fill = $('#mhBarFill');
+      if (o.progress != null) {
+        fill.style.width = Math.round(o.progress * 100) + '%';
+        fill.style.background = 'linear-gradient(90deg,#a7dfcb,#4fa78c)';
+      } else {
+        fill.style.width = Math.max(2, Math.round((o.t / o.total) * 100)) + '%';
+        fill.style.background = o.t / o.total < .25 ? 'linear-gradient(90deg,#ff9b8a,#f0715c)' : 'linear-gradient(90deg,#ffd166,#f2b54b)';
+      }
+      el.classList.toggle('warn', o.t / o.total < .22);
+    },
+
+    /* ================= world hud / radar ================= */
+    bindWorld() {
+      const isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0 || window.innerWidth < 900;
+      if (isTouch) document.body.classList.add('touch-on');
+
+      /* minimap tap = full map */
+      $('#radar').addEventListener('click', (e) => {
+        if (e.target.closest('#mapBtn') || e.target.id === 'minimap' || e.target.closest('.radar')) {
+          if (e.target.closest('#mapBtn')) { this.toggleMap(); return; }
+          this.toggleMap();
+        }
+      });
+      $('#mapBtn').addEventListener('click', (e) => { e.stopPropagation(); this.toggleMap(); });
+      $('#mapClose').addEventListener('click', () => this.closeMap());
+      $('#mapOverlay').addEventListener('click', (e) => { if (e.target.id === 'mapOverlay') this.closeMap(); });
+
+      /* vehicle prompt */
+      $('#vehEnter').addEventListener('click', () => {
+        if (this.scene.vehicle) this.scene.exitVehicle(false);
+        else {
+          const v = this.scene.nearestVehicle(130);
+          if (v) this.scene.enterVehicle(v);
+        }
+      });
+      $('#vehExit').addEventListener('click', () => this.scene.exitVehicle(false));
+      $('#hornBtn').addEventListener('click', () => this.scene.horn());
+
+      /* touch joystick */
+      const joy = $('#joystick'), knob = $('#joyKnob');
+      let joyId = null;
+      const setJoy = (ev) => {
+        const r = joy.getBoundingClientRect();
+        const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+        let dx = (ev.clientX - cx) / (r.width * .36);
+        let dy = (ev.clientY - cy) / (r.height * .36);
+        const len = Math.hypot(dx, dy);
+        if (len > 1) { dx /= len; dy /= len; }
+        this.scene.joy = { x: dx, y: dy, active: true };
+        knob.style.transform = 'translate(' + (dx * r.width * .3) + 'px,' + (dy * r.height * .3) + 'px)';
+      };
+      joy.addEventListener('pointerdown', (e) => {
+        joyId = e.pointerId;
+        try { joy.setPointerCapture(e.pointerId); } catch (err) {}
+        setJoy(e);
+        e.preventDefault();
+      });
+      joy.addEventListener('pointermove', (e) => { if (joyId === e.pointerId) { setJoy(e); e.preventDefault(); } });
+      const endJoy = () => {
+        joyId = null;
+        this.scene.joy = { x: 0, y: 0, active: false };
+        knob.style.transform = '';
+      };
+      joy.addEventListener('pointerup', endJoy);
+      joy.addEventListener('pointercancel', endJoy);
+      $('#tAction').addEventListener('click', () => this.scene.toggleVehicle());
+      $('#tMap').addEventListener('click', () => this.toggleMap());
+
+      /* promo card */
+      $('#pcClose').addEventListener('click', () => this.hidePromo());
+      $('#promoCard').addEventListener('click', (e) => {
+        if (e.target.closest('[data-pc="keep"]')) this.hidePromo();
+      });
+
+      /* full map click → ping */
+      $('#fullmap').addEventListener('click', (e) => {
+        const cv = $('#fullmap');
+        const r = cv.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width * MV.World.W;
+        const y = (e.clientY - r.top) / r.height * MV.World.H;
+        this.waypoint = { x, y };
+        this.scene.waypoint = this.waypoint;
+        this.toast(t('map.ping'));
+        this.drawFullMap();
+      });
+    },
+
+    frameTick() {
+      const now = performance.now();
+      if (now - this.lastMini > 90) {
+        this.lastMini = now;
+        this.drawRadar();
+        this.renderMissionHud();
+        this.updateSpeed();
+        this.updateVehiclePrompt();
+      }
+    },
+
+    drawRadar() {
+      const cv = $('#minimap');
+      if (!cv) return;
+      const ctx = cv.getContext('2d');
+      this.scene.drawMini(ctx, cv.width, cv.height);
+    },
+
+    updateSpeed() {
+      const v = this.scene.vehicle;
+      const hud = $('#driveHud');
+      if (!v) { if (!hud.hidden) hud.hidden = true; return; }
+      hud.hidden = false;
+      const kmh = Math.round(Math.abs(v.speed) * .36);
+      $('#speedVal').textContent = kmh;
+      const tl = $('#testLeft');
+      if (v.testLeft != null && v.testLeft > 0) {
+        tl.hidden = false;
+        tl.textContent = Math.ceil(v.testLeft) + 's';
+      } else tl.hidden = true;
+    },
+
+    updateVehiclePrompt() {
+      const v = this.scene.vehicle ? null : this.scene.nearestVehicle(120);
+      const el = $('#vehiclePrompt');
+      if (!v) { if (!el.hidden) el.hidden = true; return; }
+      el.hidden = false;
+      $('#vehName').textContent = (C().vehicle(v.id) ? MV.I18n.vehicleName(v.id) : v.id) + ' · ' + t('veh.enter');
+    },
+
+    onVehicle(v) {
+      document.body.classList.toggle('driving', !!v.on);
+      $('#driveHud').hidden = !v.on;
+      $('#vehiclePrompt').hidden = true;
+      if (v.on) {
+        if (v.test) this.toast(t('veh.testStart', { n: 30 }), 2600);
+        else this.toast(t('veh.enterToast', { name: MV.I18n.vehicleName(v.id) }));
+      } else {
+        this.toast(t('veh.exitToast'));
+      }
+    },
+
+    showDistrict(d) {
+      const el = $('#districtTag');
+      const key = d.key || ('dist.' + d.id);
+      $('#dtName').textContent = t(key);
+      $('#dtSub').textContent = t(key + '.sub');
+      el.hidden = false;
+      el.classList.remove('out');
+      clearTimeout(this._dtT);
+      this._dtT = setTimeout(() => {
+        el.classList.add('out');
+        setTimeout(() => { el.hidden = true; el.classList.remove('out'); }, 620);
+      }, 2200);
+      if (this.mapOpen) this.drawFullMap();
+    },
+
+    /* ================= full map ================= */
+    toggleMap() { this.mapOpen ? this.closeMap() : this.openMap(); },
+    openMap() {
+      this.mapOpen = true;
+      $('#mapOverlay').hidden = false;
+      this.renderLegend();
+      this.drawFullMap();
+      document.body.classList.add('map-open');
+    },
+    closeMap() {
+      this.mapOpen = false;
+      $('#mapOverlay').hidden = true;
+      document.body.classList.remove('map-open');
+    },
+    drawFullMap() {
+      const cv = $('#fullmap');
+      if (!cv) return;
+      const ctx = cv.getContext('2d');
+      this.scene.drawMini(ctx, cv.width, cv.height, { sweep: false });
+      const sx = cv.width / MV.World.W, sy = cv.height / MV.World.H;
+      ctx.save();
+      /* landmark labels */
+      ctx.font = '700 13px system-ui, sans-serif';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      (this.scene.plan.landmarks || []).forEach(l => {
+        const x = l.x * sx, y = l.y * sy;
+        ctx.fillStyle = 'rgba(20,18,34,.72)';
+        const label = t(l.key);
+        const w = ctx.measureText(label).width + 12;
+        MOA_round(ctx, x - w / 2, y - 10, w, 18, 9); ctx.fill();
+        ctx.fillStyle = '#fff8ea';
+        ctx.fillText(label, x, y);
+      });
+      /* district names */
+      ctx.font = '800 22px system-ui, sans-serif';
+      ctx.globalAlpha = .32;
+      ctx.fillStyle = '#fff8ea';
+      (this.scene.plan.districts || []).forEach(d => {
+        ctx.fillText(t(d.key), (d.x + d.w / 2) * sx, (d.y + d.h / 2) * sy);
+      });
+      ctx.globalAlpha = 1;
+      /* waypoint */
+      if (this.waypoint) {
+        const x = this.waypoint.x * sx, y = this.waypoint.y * sy;
+        ctx.strokeStyle = '#8cc8b4'; ctx.lineWidth = 3;
+        ctx.beginPath(); ctx.moveTo(x, y - 10); ctx.lineTo(x + 8, y); ctx.lineTo(x, y + 10); ctx.lineTo(x - 8, y); ctx.closePath(); ctx.stroke();
+      }
+      ctx.restore();
+    },
+    renderLegend() {
+      const el = $('#mapLegend');
+      if (!el) return;
+      const items = [['#fff8ea', 'map.you'], ['#ffd166', 'map.mission'], ['#ffe3a3', 'map.vehicles'], ['#cbb6ff', 'map.ornaments'], ['#d2e6ff', 'map.npcs']];
+      el.innerHTML = items.map(([c, k]) => '<span><i style="background:' + c + '"></i>' + esc(t(k)) + '</span>').join('') +
+        '<span style="opacity:.7">' + esc(t('map.sub')) + '</span>';
+    },
+
+    /* ================= promo preview ================= */
+    showPromo(p) {
+      const o = C().orn(p.item);
+      const set = C().RAPID.sets.find(s => s.id === p.set);
+      const perks = (set && set.perks || []).slice(0, 3).map(k => t(k)).join(' · ');
+      const el = $('#promoCard');
+      const art = o ? C().spriteData(o.art) : '';
+      $('#pcBody').innerHTML = `
+        <div class="pc-kicker">${esc(t('preview.kicker'))}</div>
+        ${art ? `<img class="pc-thumb" alt="" src="${art}">` : ''}
+        <h4>💎 ${esc(p.setName || '')}</h4>
+        <div class="pc-set">${esc(p.perks ? p.perks : perks)}</div>
+        <div class="pc-perks">${(set && set.perks || []).slice(0, 3).map(k => '<span>' + esc(t(k)) + '</span>').join('')}</div>
+        <div class="pc-actions">
+          <a class="btn gold" href="${esc(p.url || RAPID_URL)}" target="_blank" rel="noopener">${esc(t('preview.view'))}</a>
+          <button class="btn ghost" data-pc="keep">${esc(t('preview.keep'))}</button>
+        </div>`;
+      el.hidden = false;
+      el.classList.remove('out');
+      this.promo = p;
+      clearTimeout(this._promoT);
+      this._promoT = setTimeout(() => this.hidePromo(), 11000);
+    },
+    hidePromo() {
+      const el = $('#promoCard');
+      if (!el) return;
+      el.hidden = true;
+      this.promo = null;
+      clearTimeout(this._promoT);
+    },
+
+    /* ================= serial / rapid ================= */
+    openSerial(prefill) {
+      this.openModal(`
+        <h3>💎 ${esc(t('serial.title'))}</h3>
+        <p class="lead">${esc(t('serial.sub'))}</p>
+        <div class="serial-row">
+          <input type="text" id="serIn" autocapitalize="characters" autocomplete="off" placeholder="${esc(t('rapid.placeholder'))}" value="${esc(prefill || '')}">
+          <button class="btn sm coral" data-mact="redeem">${esc(t('rapid.unlock'))}</button>
+        </div>
+        <div style="display:flex;gap:7px;margin-top:10px;flex-wrap:wrap">
+          <button class="btn sm mint" data-mact="trial">🎟 ${esc(t('rapid.trialTry'))}</button>
+          <a class="btn sm ghost" href="${RAPID_URL}" target="_blank" rel="noopener">💎 ${esc(t('rapid.creatorShort'))} ↗</a>
+        </div>
+        <div class="trial" style="margin-top:12px">🔑 ${esc(t('rapid.trialTitle'))} — <code>${C().RAPID.trialCode}</code><br><span style="opacity:.8">${esc(t('rapid.trialSub'))}</span></div>
+        <button class="btn wide ghost" style="margin-top:10px" data-mact="close">${esc(t('common.close'))}</button>
+      `);
+      const card = $('#modalCard');
+      const input = card.querySelector('#serIn');
+      const doRedeem = (code) => {
+        const r = S().redeem(code);
+        if (!r.ok) { this.toast(r.reason === 'already' ? t('rapid.already') : t('rapid.invalid')); return; }
+        this.closeModal();
+        this.confetti(60);
+        this.parcel();
+        const names = r.items.map(i => MV.I18n.itemName(i))
+          .concat((r.pets || []).map(i => MV.I18n.petName(i)))
+          .concat((r.rides || []).map(i => MV.I18n.rideName(i))).join(', ');
+        this.toast(r.creator ? t('rapid.creatorOk') : r.trial ? t('gift.claimed', { name: names }) : t('rapid.success', { name: r.name || names }), 3400);
+        this.scene.spawnVehicles();
+        this.scene.syncPets(false);
+        this.updateHud();
+        setTimeout(() => { if (this.sheetName) this.openSheet(this.sheetName, this._sheetOpts, true); }, 300);
+      };
+      card.querySelector('[data-mact="redeem"]').addEventListener('click', () => {
+        const code = (input.value || '').trim();
+        if (!code) return;
+        doRedeem(code);
+      });
+      input.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); doRedeem((input.value || '').trim()); } });
+      card.querySelector('[data-mact="trial"]').addEventListener('click', () => doRedeem(C().RAPID.trialCode));
+      card.querySelector('[data-mact="close"]').addEventListener('click', () => this.closeModal());
+    },
+
+    showroomModal() {
+      const sets = C().RAPID.sets;
+      const perks = ['perk.supercar', 'perk.sleigh', 'perk.rabbit', 'perk.coins2', 'perk.orn4'];
+      this.openModal(`
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="font-size:1.7em">🏎️</div>
+          <div><h3>${esc(t('showroom.title'))}</h3><p class="lead" style="margin:0">${esc(t('showroom.sub'))}</p></div>
+        </div>
+        <div class="set-orn" style="margin:12px 0 8px">
+          <span class="o" style="width:52px;height:52px"><img class="spr" alt="" src="${C().rideData('supercar')}"></span>
+          <span class="o" style="width:52px;height:52px"><img class="spr" alt="" src="${C().rideData('sleigh')}"></span>
+          ${sets.map(s => { const o = C().orn(s.items[0]); return `<span class="o" style="width:52px;height:52px"><img class="spr" alt="" src="${C().spriteData(o.art)}"></span>`; }).join('')}
+        </div>
+        <div class="pc-perks" style="margin:0 0 10px">${perks.map(k => '<span>' + esc(t(k)) + '</span>').join('')}</div>
+        <p class="muted tiny">${esc(t('showroom.note'))}</p>
+        <div class="modal-actions" style="flex-wrap:wrap">
+          <button class="btn sm gold" data-mact="testcar">🏎 ${esc(t('showroom.testCar'))}</button>
+          <button class="btn sm mint" data-mact="testsleigh">🛷 ${esc(t('showroom.testSleigh'))}</button>
+        </div>
+        <div class="modal-actions" style="margin-top:8px">
+          <a class="btn sm" href="${RAPID_URL}" target="_blank" rel="noopener">💎 ${esc(t('showroom.browse'))}</a>
+          <button class="btn sm ghost" data-mact="serial">🔑 ${esc(t('showroom.serial'))}</button>
+        </div>
+        <button class="btn wide ghost" style="margin-top:8px" data-mact="close">${esc(t('common.close'))}</button>
+      `);
+      const card = $('#modalCard');
+      const test = (id) => {
+        this.closeModal();
+        const v = this.scene.vehicles.find(x => x.id === id);
+        if (!v) return;
+        this.scene.warp(v.x - 50, v.y + 40);
+        setTimeout(() => this.scene.enterVehicle(v), 260);
+      };
+      card.querySelector('[data-mact="testcar"]').addEventListener('click', () => test('supercar'));
+      card.querySelector('[data-mact="testsleigh"]').addEventListener('click', () => test('sleigh'));
+      card.querySelector('[data-mact="serial"]').addEventListener('click', () => this.openSerial());
+      card.querySelector('[data-mact="close"]').addEventListener('click', () => this.closeModal());
+    },
+
+    testDriveEnd() {
+      this.openModal(`
+        <div style="text-align:center;font-size:2em">🏎️</div>
+        <h3 style="text-align:center">${esc(t('testdrive.title'))}</h3>
+        <p class="lead" style="text-align:center">${esc(t('testdrive.body'))}</p>
+        <div class="pc-perks" style="justify-content:center">${['perk.supercar', 'perk.sleigh', 'perk.coins2'].map(k => '<span>' + esc(t(k)) + '</span>').join('')}</div>
+        <div class="modal-actions">
+          <a class="btn coral" href="${RAPID_URL}" target="_blank" rel="noopener" style="flex:1">💎 ${esc(t('testdrive.unlock'))}</a>
+          <button class="btn ghost" data-mact="keep" style="flex:1">${esc(t('testdrive.keep'))}</button>
+        </div>
+      `);
+      const card = $('#modalCard');
+      card.querySelector('[data-mact="keep"]').addEventListener('click', () => this.closeModal());
+    },
+
+    profileModal() {
+      const st = S().state;
+      this.openModal(`
+        <h3>${esc(t('profile.title'))}</h3>
+        <p class="lead">${esc(t('profile.sub'))}</p>
+        <div class="kv"><span>${esc(t('profile.level'))}</span><b>Lv. ${S().level()}</b></div>
+        <div class="kv"><span>${esc(t('profile.xp'))}</span><b>${fmt(st.xp)} / ${fmt(S().level() * 300)}</b></div>
+        <div class="kv"><span>${esc(t('profile.missions'))}</span><b>${fmt(st.missionsDone)}</b></div>
+        <div class="kv"><span>${esc(t('profile.vip'))}</span><b>${st.vip ? 'ON ×2' : '—'}</b></div>
+        <div class="modal-actions" style="margin-top:12px">
+          <a class="btn sm gold" href="${RAPID_URL}" target="_blank" rel="noopener">💎 ${esc(t('rapid.title'))}</a>
+          <button class="btn sm ghost" data-mact="close">${esc(t('common.close'))}</button>
+        </div>
+      `);
+      $('#modalCard').querySelector('[data-mact="close"]').addEventListener('click', () => this.closeModal());
+    },
+
+    hypeModal() {
+      this.openModal(`
+        <h3>⭐ ${esc(t('hype.title'))}</h3>
+        <p class="lead">${esc(t('hype.sub'))}</p>
+        <div class="kv"><span>${esc(t('hype.now'))}</span><b>${'★'.repeat(this.stars) || '—'}</b></div>
+        <div class="kv"><span>${esc(t('hype.how'))}</span><b>${esc(t('hype.howTxt'))}</b></div>
+        <button class="btn wide ghost" style="margin-top:12px" data-mact="close">${esc(t('common.close'))}</button>
+      `);
+      $('#modalCard').querySelector('[data-mact="close"]').addEventListener('click', () => this.closeModal());
+    },
+
+    /* ================= toast / bubble / fx ================= */
     toast(msg, ms) {
       const w = $('#toastWrap');
       const d = document.createElement('div');
       d.className = 'toast';
       d.textContent = msg;
       w.appendChild(d);
-      setTimeout(() => { d.classList.add('out'); setTimeout(() => d.remove(), 320); }, ms || 2100);
+      setTimeout(() => { d.classList.add('out'); setTimeout(() => d.remove(), 320); }, ms || 2200);
     },
 
     bubble(text, x, y) {
@@ -272,20 +752,14 @@
     },
 
     tipTimer() {
-      const tips = ['tip.start', 'tip.decorate', 'tip.click', 'tip.gift'];
+      const tips = ['tip.start', 'tip.drive', 'tip.decorate', 'tip.map', 'tip.gift'];
       let i = 0;
-      const show = () => {
-        this.tip(t(tips[i % tips.length]));
-        i++;
-      };
-      setTimeout(show, 1400);
-      setInterval(() => {
-        if (document.hidden) return;
-        show();
-      }, 26000);
+      const show = () => { this.tip(t(tips[i % tips.length])); i++; };
+      setTimeout(show, 1800);
+      setInterval(() => { if (!document.hidden) show(); }, 30000);
     },
 
-    /* ---------------- sheet ---------------- */
+    /* ================= sheets ================= */
     openSheet(name, opts, silent) {
       this.sheetName = name;
       this._sheetOpts = opts || {};
@@ -322,7 +796,7 @@
       $('#weatherBar').classList.remove('open');
     },
 
-    /* ---------------- villagers panel ---------------- */
+    /* ---------- villages ---------- */
     panelVillages() {
       const st = S().state;
       const cards = C().VILLAGES.map(v => {
@@ -354,7 +828,7 @@
         </div>`;
     },
 
-    /* ---------------- shop panel ---------------- */
+    /* ---------- shop ---------- */
     panelShop(opts) {
       const st = S().state;
       const tab = opts.tab || this._shopTab || 'all';
@@ -366,9 +840,7 @@
         .map(([k, key]) => `<button data-act="tab" data-tab="${k}" class="${tab === k ? 'on' : ''}">${esc(t(key))}</button>`).join('');
 
       let html = `<div class="tabs">${tabs}</div>`;
-      if (disc > 0) {
-        html += `<div class="coop-badge" style="margin-bottom:10px">🎉 ${esc(t('shop.discountOn'))}</div>`;
-      }
+      if (disc > 0) html += `<div class="coop-badge" style="margin-bottom:10px">🎉 ${esc(t('shop.discountOn'))}</div>`;
 
       const ornAllowed = tab === 'all' || tab === 'orn';
       if (ornAllowed) {
@@ -415,13 +887,13 @@
               <div style="margin-top:6px">${owned
                 ? `<button class="btn sm ${active ? 'ghost' : 'mint'} wide" data-act="togglePet" data-id="${p.id}">${esc(active ? t('shop.turnOff') : t('shop.turnOn'))}</button>`
                 : rapidOnly ? `<button class="btn sm gold wide" data-act="openRapid">${esc(t('rapid.title'))}</button>`
-                : `<button class="btn sm wide" data-act="buyPet" data-id="${p.id}">${esc(t('shop.buy'))}</button>`}</div>
+                  : `<button class="btn sm wide" data-act="buyPet" data-id="${p.id}">${esc(t('shop.buy'))}</button>`}</div>
             </div>`;
           }).join('') + `</div></div>`;
       }
 
       if (tab === 'all' || tab === 'ride') {
-        html += `<div class="section"><div class="section-title"><h3>${esc(t('shop.ridesTitle'))}</h3></div><div class="grid">` +
+        html += `<div class="section"><div class="section-title"><h3>${esc(t('shop.ridesTitle'))}</h3><span class="sub">${esc(t('shop.rideHint'))}</span></div><div class="grid">` +
           C().RIDES.map(r => {
             const owned = S().hasRide(r.id);
             const active = S().isRideActive(r.id);
@@ -434,16 +906,17 @@
               <div style="margin-top:6px">${owned
                 ? `<button class="btn sm ${active ? 'ghost' : 'mint'} wide" data-act="toggleRide" data-id="${r.id}">${esc(active ? t('shop.turnOff') : t('shop.turnOn'))}</button>`
                 : rapidOnly ? `<button class="btn sm gold wide" data-act="openRapid">${esc(t('rapid.title'))}</button>`
-                : `<button class="btn sm wide" data-act="buyRide" data-id="${r.id}">${esc(t('shop.buy'))}</button>`}</div>
+                  : `<button class="btn sm wide" data-act="buyRide" data-id="${r.id}">${esc(t('shop.buy'))}</button>`}</div>
             </div>`;
           }).join('') + `</div></div>`;
       }
 
-      html += `<div class="section"><button class="btn ghost wide" data-act="openRapid">💎 ${esc(t('rapid.title'))} →</button></div>`;
+      html += `<div class="section"><button class="btn ghost wide" data-act="showroom">🏎 ${esc(t('showroom.title'))} →</button></div>`;
+      html += `<div class="section"><a class="btn gold wide" href="${RAPID_URL}" target="_blank" rel="noopener">💎 ${esc(t('rapid.creatorShort'))} ↗</a></div>`;
       return html;
     },
 
-    /* ---------------- decorate panel ---------------- */
+    /* ---------- decorate ---------- */
     panelDecorate() {
       const st = S().state;
       const inv = st.inv || {};
@@ -475,7 +948,7 @@
       return `<div class="section">
           <div class="section-title"><h3>${esc(t('decorate.tray'))}</h3><span class="sub">${placed.length}/${S().maxPlacements()} ${esc(t('decorate.scene'))}</span></div>
           ${tray}
-          <p class="muted tiny" style="margin-top:9px">${esc(t('decorate.sub'))}</p>
+          <p class="muted tiny" style="margin-top:9px">${esc(t('decorate.sub2'))}</p>
         </div>
         <div class="section">
           <div class="section-title"><h3>${esc(t('decorate.scene'))}</h3></div>
@@ -483,7 +956,7 @@
         </div>`;
     },
 
-    /* ---------------- friends panel ---------------- */
+    /* ---------- friends ---------- */
     panelFriends() {
       const st = S().state;
       const link = S().referralLink(location.origin + location.pathname);
@@ -511,7 +984,15 @@
           <div style="display:flex;gap:7px;margin-top:9px;flex-wrap:wrap">
             <button class="btn sm ghost" data-act="copyCoop">🔗 ${esc(t('friends.coopLink'))}</button>
             ${c.joined < c.max ? `<button class="btn sm mint" data-act="coopSim">+ ${esc(t('friends.coopSim'))}</button>` : ''}
-          </div>`;
+          </div>
+          ${c.unlocked ? `<div class="coop-rapid">
+            <b>💎 ${esc(t('friends.rapidTitle'))}</b>
+            <span>${esc(t('friends.rapidBanner'))}</span>
+            <div style="display:flex;gap:7px;margin-top:8px;flex-wrap:wrap">
+              <a class="btn sm gold" href="${RAPID_URL}" target="_blank" rel="noopener">${esc(t('rapid.creatorShort'))} ↗</a>
+              <button class="btn sm ghost" data-act="serialOpen">🔑 ${esc(t('rapid.serialTitle'))}</button>
+            </div>
+          </div>` : ''}`;
       }
 
       return `
@@ -538,9 +1019,24 @@
         <p class="muted tiny" style="margin-top:10px">${esc(t('friends.shopHint'))}</p>`;
     },
 
-    /* ---------------- rapid panel ---------------- */
+    /* ---------- rapid ---------- */
     panelRapid() {
       const st = S().state;
+      const cr = C().RAPID.creator;
+      const creatorHtml = `
+        <div class="creator-card">
+          <div class="cc-glow"></div>
+          <div class="cc-kicker">OFFICIAL BUNDLE · LATPEED</div>
+          <h4>${esc(C().setName({ name: cr.name }))} <span class="cc-price">₩${fmt(cr.price)}</span></h4>
+          <p class="cc-desc">${esc(t('rapid.creatorDesc'))}</p>
+          <div class="pc-perks">${cr.perks.map(k => '<span>' + esc(t(k)) + '</span>').join('')}</div>
+          <div class="cc-actions">
+            <a class="btn gold" href="${cr.url}" target="_blank" rel="noopener">💎 ${esc(t('rapid.creatorBuy'))} ↗</a>
+            <button class="btn ghost" data-act="serialOpen">🔑 ${esc(t('rapid.enterCode'))}</button>
+          </div>
+          <div class="cc-code">🔑 ${esc(t('rapid.bundleCode'))} <code>${cr.code}</code></div>
+        </div>`;
+
       const sets = C().RAPID.sets.map(set => {
         const owned = set.items.every(i => S().ownCount(i) > 0) &&
           (set.pets || []).every(id => S().hasPet(id)) && (set.rides || []).every(id => S().hasRide(id));
@@ -555,15 +1051,17 @@
           <h4>💎 ${esc(C().setName(set))} ${owned ? `<span class="pill">${esc(t('rapid.owned'))}</span>` : ''}</h4>
           <div class="set-desc">${esc(C().setDesc(set))}</div>
           <div class="set-orn">${thumbs}</div>
+          <div class="pc-perks">${(set.perks || []).map(k => '<span>' + esc(t(k)) + '</span>').join('')}</div>
           <div class="set-foot">
             <span class="set-price">₩${fmt(set.price)}<small>Rapid</small></span>
-            <button class="btn sm gold" data-act="rapidBuy" data-url="${esc(set.buyUrl)}">${esc(t('rapid.buy'))} ↗</button>
+            <a class="btn sm gold" href="${set.buyUrl}" target="_blank" rel="noopener">${esc(t('rapid.buy'))} ↗</a>
           </div>
           <div class="set-note">🔑 ${esc(t('rapid.serialSub'))}</div>
         </div>`;
       }).join('');
 
-      return `${sets}
+      return `${creatorHtml}
+        ${sets}
         <div class="section card" style="padding:13px">
           <div class="section-title" style="margin-bottom:2px"><h3>${esc(t('rapid.serialTitle'))}</h3></div>
           <p class="muted tiny">${esc(t('rapid.serialSub'))}</p>
@@ -571,12 +1069,15 @@
             <input type="text" id="serialInput" autocapitalize="characters" autocomplete="off" placeholder="${esc(t('rapid.placeholder'))}">
             <button class="btn sm coral" data-act="redeem">${esc(t('rapid.unlock'))}</button>
           </div>
+          <div style="display:flex;gap:7px;margin-top:8px;flex-wrap:wrap">
+            <button class="btn sm mint" data-act="trialTry">🎟 ${esc(t('rapid.trialTry'))}</button>
+          </div>
           <div class="trial">🔑 ${esc(t('rapid.trialTitle'))} — <code>${C().RAPID.trialCode}</code><br><span style="opacity:.8">${esc(t('rapid.trialSub'))}</span></div>
           <p class="muted tiny" style="margin-top:9px">${esc(t('rapid.configNote'))}</p>
         </div>`;
     },
 
-    /* ---------------- panel actions ---------------- */
+    /* ---------- panel actions ---------- */
     bindPanel(body, name) {
       body.querySelectorAll('[data-act]').forEach(el => {
         const act = el.dataset.act;
@@ -632,25 +1133,29 @@
       } else if (act === 'buyPet') {
         const cfg = C().pet(el.dataset.id);
         const r = S().buyPet(el.dataset.id);
-        if (r.ok) { this.toast(t('shop.petOn', { name: MV.I18n.petName(el.dataset.id) })); this.openSheet('shop', this._sheetOpts, true); }
+        if (r.ok) { this.toast(t('shop.petOn', { name: MV.I18n.petName(el.dataset.id) })); this.scene.syncPets(false); this.openSheet('shop', this._sheetOpts, true); }
         else if (r.reason === 'rapid') { this.openSheet('rapid'); }
         else this.toast(t('shop.notEnough', { n: fmt(Math.max(0, (cfg ? cfg.price : 0) - st.coins)) }));
       } else if (act === 'togglePet') {
         const on = S().togglePet(el.dataset.id);
+        this.scene.syncPets(false);
         this.toast(on ? t('shop.petOn', { name: MV.I18n.petName(el.dataset.id) }) : t('shop.petOff', { name: MV.I18n.petName(el.dataset.id) }));
         this.openSheet('shop', this._sheetOpts, true);
       } else if (act === 'buyRide') {
         const r = S().buyRide(el.dataset.id);
         const rcfg = C().ride(el.dataset.id);
-        if (r.ok) { this.toast(t('shop.rideOn', { name: MV.I18n.rideName(el.dataset.id) })); this.openSheet('shop', this._sheetOpts, true); }
+        if (r.ok) { this.toast(t('shop.rideOn', { name: MV.I18n.rideName(el.dataset.id) })); this.scene.spawnVehicles(); this.openSheet('shop', this._sheetOpts, true); }
         else if (r.reason === 'rapid') this.openSheet('rapid');
         else this.toast(t('shop.notEnough', { n: fmt(Math.max(0, (rcfg ? rcfg.price : 0) - st.coins)) }));
       } else if (act === 'toggleRide') {
         const on = S().toggleRide(el.dataset.id);
+        this.scene.spawnVehicles();
         this.toast(on ? t('shop.rideOn', { name: MV.I18n.rideName(el.dataset.id) }) : t('shop.rideOff', { name: MV.I18n.rideName(el.dataset.id) }));
         this.openSheet('shop', this._sheetOpts, true);
       } else if (act === 'openRapid') {
         this.openSheet('rapid');
+      } else if (act === 'showroom') {
+        this.showroomModal();
       } else if (act === 'pick') {
         const id = el.dataset.id;
         if (!(st.inv[id] > 0)) return;
@@ -689,11 +1194,19 @@
         const r = S().coopSim();
         if (r) {
           this.toast(t('friends.coopSimmed', { name: r.friend.name }));
-          if (r.coop.unlocked) { this.confetti(44); this.toast(t('friends.coopReady')); }
+          if (r.coop.unlocked) { this.confetti(44); this.toast(t('friends.rapidBanner'), 3400); }
         }
         this.openSheet('friends', this._sheetOpts, true);
-      } else if (act === 'rapidBuy') {
-        window.open(el.dataset.url, '_blank', 'noopener');
+      } else if (act === 'serialOpen') {
+        this.openSerial();
+      } else if (act === 'trialTry') {
+        const r = S().redeem(C().RAPID.trialCode);
+        if (r.ok) {
+          this.confetti(50);
+          this.toast(t('rapid.trialOk'), 3000);
+          this.scene.spawnVehicles();
+          this.openSheet(this.sheetName || 'rapid', this._sheetOpts, true);
+        } else this.toast(r.reason === 'already' ? t('rapid.already') : t('rapid.invalid'));
       } else if (act === 'redeem') {
         const input = name === 'rapid' ? ($('#sheetBody').querySelector('#serialInput') || el) : el;
         const code = (input.value || '').trim();
@@ -707,6 +1220,8 @@
             .concat((r.pets || []).map(i => MV.I18n.petName(i)))
             .concat((r.rides || []).map(i => MV.I18n.rideName(i))).join(', ');
           this.toast(r.trial ? t('gift.claimed', { name: names }) : t('rapid.success', { name: r.name || names }));
+          this.scene.spawnVehicles();
+          this.scene.syncPets(false);
           setTimeout(() => this.openSheet('decorate'), 900);
         } else {
           this.toast(r.reason === 'already' ? t('rapid.already') : t('rapid.invalid'));
@@ -714,7 +1229,7 @@
       }
     },
 
-    /* ---------------- ornament menu ---------------- */
+    /* ================= ornament menu ================= */
     ornamentMenu(uid) {
       const st = S().state;
       const p = (st.deco[st.village] || []).find(x => x.uid === uid);
@@ -746,7 +1261,7 @@
       }));
     },
 
-    /* ---------------- modal ---------------- */
+    /* ================= modal ================= */
     openModal(html) {
       $('#modalCard').innerHTML = html;
       $('#modal').classList.add('on');
@@ -758,7 +1273,7 @@
       $('#modalCard').innerHTML = '';
     },
 
-    /* ---------------- clipboard ---------------- */
+    /* ================= clipboard ================= */
     copy(text, okMsg) {
       const done = () => this.toast(okMsg || t('common.copied'));
       const fallback = () => {
@@ -773,7 +1288,7 @@
       } else fallback();
     },
 
-    /* ---------------- gifts ---------------- */
+    /* ================= gifts ================= */
     giftPicker(preselect) {
       const st = S().state;
       const ids = Object.keys(st.inv || {}).filter(id => st.inv[id] > 0 && C().orn(id));
@@ -925,7 +1440,7 @@
       });
     },
 
-    /* ---------------- trending ---------------- */
+    /* ================= trending ================= */
     async loadTrend() {
       const url = 'data/trending-items.json';
       let data = null;
@@ -960,7 +1475,7 @@
       $('#trendLive').textContent = t('trend.live');
     },
 
-    /* ---------------- first run ---------------- */
+    /* ================= first run ================= */
     nicknameModal(force) {
       const st = S().state;
       this.openModal(`
@@ -978,6 +1493,11 @@
         if (S().state.seenWelcome.indexOf('nick') < 0) { S().state.seenWelcome.push('nick'); S().save(); }
         this.closeModal();
         if (name) this.toast(t('nick.welcome', { name: name }));
+        /* first-run open-world controls card */
+        if (S().state.seenWelcome.indexOf('world') < 0) {
+          S().state.seenWelcome.push('world'); S().save();
+          setTimeout(() => this.welcomeModal('world'), 700);
+        }
       };
       card.querySelector('[data-mact="ok"]').addEventListener('click', () => {
         const v = (card.querySelector('#nickInput').value || '').trim() || 'MOA';
@@ -1008,6 +1528,16 @@
             <button class="btn coral" data-mact="join">${esc(t('friends.coopJoinBtn'))}</button>
           </div>
         `);
+      } else if (kind === 'world') {
+        this.openModal(`
+          <div style="text-align:center;font-size:2.2em">${C().village(S().state.village).emoji} 🏎️</div>
+          <h3 style="text-align:center">${esc(t('welcome.worldTitle'))}</h3>
+          <p class="lead" style="text-align:center">${esc(t('welcome.worldBody'))}</p>
+          <div class="kv"><span>${esc(t('welcome.worldMove'))}</span><b>WASD / Tap</b></div>
+          <div class="kv"><span>${esc(t('welcome.worldDrive'))}</span><b>F</b></div>
+          <div class="kv"><span>${esc(t('welcome.worldMap'))}</span><b>M</b></div>
+          <button class="btn coral wide" style="margin-top:12px" data-mact="ok">${esc(t('welcome.ok'))}</button>
+        `);
       }
       const card = $('#modalCard');
       card.querySelectorAll('[data-mact="ok"],[data-mact="later"]').forEach(b => b.addEventListener('click', () => this.closeModal()));
@@ -1021,6 +1551,16 @@
       });
     }
   };
+
+  function MOA_round(ctx, x, y, w, h, r) {
+    r = Math.min(r, w / 2, h / 2);
+    ctx.beginPath();
+    if (ctx.roundRect) { ctx.roundRect(x, y, w, h, r); return; }
+    ctx.moveTo(x + r, y); ctx.lineTo(x + w - r, y); ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+    ctx.lineTo(x + w, y + h - r); ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    ctx.lineTo(x + r, y + h); ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+    ctx.lineTo(x, y + r); ctx.quadraticCurveTo(x, y, x + r, y); ctx.closePath();
+  }
 
   MV.UI = UI;
 })();

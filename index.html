@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
 <meta name="theme-color" content="#20233c">
 <title>MOA Village</title>
-<meta name="description" content="MOA Village — collect cozy villages, place ornaments, meet pets and rides, and gift rare pieces to friends.">
+<meta name="description" content="MOA Village — an open-world cozy village: drive, explore, take on live missions and decorate anywhere. 4 languages.">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
@@ -21,6 +21,7 @@
     <div class="hud-left">
       <button class="chip coin" id="coinChip" title="coins">
         <span class="chip-ico">🪙</span><span id="coinCount">0</span>
+        <span class="vip-badge" id="vipBadgeCard" hidden>×2</span>
       </button>
       <button class="chip spark" id="sparkChip" title="sparkles">
         <span class="chip-ico">✨</span><span id="sparkCount">0</span>
@@ -29,8 +30,14 @@
         <span id="villageEmoji">❄️</span>
         <span id="villageName">Snowbell</span>
       </button>
+      <button class="chip level-chip" id="levelChip" title="level">
+        <span class="lv">Lv.<b id="levelNum">1</b></span>
+      </button>
     </div>
     <div class="hud-right">
+      <div class="stars" id="stars" title="hype">
+        <i data-i="1">★</i><i data-i="2">★</i><i data-i="3">★</i><i data-i="4">★</i><i data-i="5">★</i>
+      </div>
       <div class="seg lang-seg" id="langSeg" role="group" aria-label="language">
         <button data-lang="ko">KO</button>
         <button data-lang="en">EN</button>
@@ -40,6 +47,7 @@
       <button class="icon-btn" id="weatherBtn" aria-label="weather">
         <span id="weatherIcon">☀️</span>
       </button>
+      <button class="icon-btn serial-btn" id="serialBtn" aria-label="serial code" title="serial">💎</button>
     </div>
   </header>
 
@@ -59,8 +67,44 @@
     <span class="trend-time" id="trendTime"></span>
   </button>
 
-  <div class="bubble-layer" id="bubbleLayer"></div>
+  <!-- GTA-style radar -->
+  <div class="radar" id="radar">
+    <canvas id="minimap" width="336" height="336"></canvas>
+    <span class="radar-n">N</span>
+    <button class="radar-map" id="mapBtn" aria-label="map">🗺️</button>
+    <span class="radar-hint" id="radarHint" data-i18n="map.hint">M</span>
+  </div>
 
+  <!-- objective bar -->
+  <div class="mission-hud" id="missionHud" hidden>
+    <span class="mh-ico" id="mhIco">📦</span>
+    <div class="mh-main">
+      <b id="mhTitle">Mission</b>
+      <span id="mhSub">Go there</span>
+      <i class="mh-bar"><b id="mhBarFill"></b></i>
+    </div>
+    <div class="mh-right">
+      <span class="mh-dist" id="mhDist">0m</span>
+      <span class="mh-time" id="mhTime">0:00</span>
+    </div>
+  </div>
+
+  <div class="district-tag" id="districtTag" hidden>
+    <b id="dtName"></b>
+    <span id="dtSub"></span>
+  </div>
+
+  <div class="vehicle-prompt" id="vehiclePrompt" hidden>
+    <button id="vehEnter"><span class="k">F</span><span id="vehName">탑승</span></button>
+  </div>
+
+  <div class="drive-hud" id="driveHud" hidden>
+    <div class="speedo"><b id="speedVal">0</b><span>km/h</span><i id="testLeft" hidden></i></div>
+    <button id="hornBtn" class="dbtn" aria-label="horn">📣</button>
+    <button id="vehExit" class="dbtn exit"><span class="k">F</span></button>
+  </div>
+
+  <div class="bubble-layer" id="bubbleLayer"></div>
   <div class="toast-wrap" id="toastWrap"></div>
 
   <div class="tip" id="tip"><span id="tipText"></span></div>
@@ -82,6 +126,33 @@
       <span class="di">💎</span><span class="dl" data-i18n="dock.rapid">Rare sets</span>
     </button>
   </nav>
+
+  <!-- mobile controls -->
+  <div class="touch" id="touch">
+    <div class="joystick" id="joystick"><i id="joyKnob"></i></div>
+    <div class="tbtns">
+      <button class="tb" id="tMap" aria-label="map">🗺️</button>
+      <button class="tb act" id="tAction" aria-label="enter vehicle">F</button>
+    </div>
+  </div>
+
+  <!-- light, non-blocking rare preview card -->
+  <div class="promo-card" id="promoCard" hidden>
+    <button class="pc-close" id="pcClose" aria-label="close">✕</button>
+    <div class="pc-body" id="pcBody"></div>
+  </div>
+
+  <!-- full map -->
+  <div class="map-overlay" id="mapOverlay" hidden>
+    <div class="map-panel">
+      <div class="map-head">
+        <div><b data-i18n="map.title">World map</b><span data-i18n="map.sub">Tap the map to set a ping</span></div>
+        <button class="close-btn" id="mapClose" aria-label="close">✕</button>
+      </div>
+      <div class="map-canvas-wrap"><canvas id="fullmap" width="900" height="660"></canvas></div>
+      <div class="map-legend" id="mapLegend"></div>
+    </div>
+  </div>
 
   <div class="sheet-scrim" id="scrim"></div>
   <section class="sheet" id="sheet" aria-modal="true" role="dialog">
@@ -108,7 +179,9 @@
 <script src="assets/js/i18n.js"></script>
 <script src="assets/js/catalog.js"></script>
 <script src="assets/js/store.js"></script>
+<script src="assets/js/world.js"></script>
 <script src="assets/js/scene.js"></script>
+<script src="assets/js/missions.js"></script>
 <script src="assets/js/ui.js"></script>
 <script src="assets/js/app.js"></script>
 </body>

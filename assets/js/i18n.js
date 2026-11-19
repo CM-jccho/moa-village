@@ -384,6 +384,228 @@
     tram: [['칭칭, 다음 역은 중앙 광장!', '오늘도 안전 운행'], ['Ding ding — next stop, the square!', 'Safe travels today.'], ['叮叮，下一站中央广场！', '今天也安全行驶。'], ['チンチン、次は中央広場！', '今日も安全運転。']]
   };
 
+  /* ---- v2 open-world UI strings ---- */
+  const V2 = {
+    ko: {
+      'mis.delivery': '특급 배송', 'mis.supply': '보급 상자', 'mis.pet': '반려동물 구조', 'mis.festival': '거리 축제',
+      'mis.sub.pickup': '상점에서 짐을 받으세요', 'mis.sub.deliver': '목적지로 배달하세요',
+      'mis.sub.supply': '낙하산 상자를 찾아 여세요', 'mis.sub.petFind': '길 잃은 친구를 찾으세요',
+      'mis.sub.petHome': '집까지 데려다주세요', 'mis.sub.festival': '축제 구역에서 히트를 올리세요',
+      'mis.started': '{name} 시작! 💨', 'mis.completed': '{name} 완료! +{coins} 코인 · +{xp} XP',
+      'mis.expired': '미션이 종료됐어요. 다음 기회에!', 'mis.starUp': '히트 상승!', 'mis.levelUp': '레벨 {n} 달성!',
+      'map.title': '월드 맵', 'map.sub': '지도를 눌러 핑을 찍으세요', 'map.hint': 'M', 'map.ping': '핑을 찍었어요',
+      'preview.kicker': '희귀 세트 미리보기', 'preview.view': '래피드 세트 보기', 'preview.keep': '계속 플레이',
+      'serial.title': '시리얼 코드', 'serial.sub': '래피드에서 받은 코드를 넣으면 마을 희귀템이 열려요.',
+      'rapid.bundleCode': '번들 코드', 'rapid.creatorBuy': '래피드에서 구매',
+      'rapid.creatorDesc': 'MOA Daily · AI 세팅 팩 9,900원 — 마을 희귀템과 VIP 2배 코인까지 한 번에.',
+      'rapid.creatorOk': '래피드 번들 코드 확인! 희귀템이 열렸어요.', 'rapid.creatorShort': '래피드 번들',
+      'rapid.enterCode': '시리얼 코드 입력', 'rapid.trialOk': '체험 코드 적용! 희귀템을 미리 써 보세요.',
+      'rapid.trialTry': '체험 코드 미리 써보기',
+      'showroom.title': 'MOA VIP 쇼룸', 'showroom.sub': '슈퍼카와 별빛 썰매를 30초 무료로 시승해 보세요.',
+      'showroom.note': '시승 후 마음에 들면 래피드에서 영구 해제할 수 있어요.',
+      'showroom.testCar': '슈퍼카 30초 시승', 'showroom.testSleigh': '썰매 30초 시승',
+      'showroom.browse': '래피드에서 영구 해제', 'showroom.serial': '시리얼 코드 입력',
+      'testdrive.title': '시승 끝!', 'testdrive.body': '마음에 드셨나요? 래피드에서 영구 해제하면 마을 어디서나 탈 수 있어요.',
+      'testdrive.unlock': '래피드에서 영구 해제', 'testdrive.keep': '계속 플레이',
+      'profile.title': '내 프로필', 'profile.sub': '마을에서의 기록이에요.', 'profile.level': '레벨',
+      'profile.xp': '경험치', 'profile.missions': '완료한 미션', 'profile.vip': 'VIP 코인 2배',
+      'hype.title': '히트 ★', 'hype.sub': '달리거나 미션을 완료하면 히트가 올라가요.',
+      'hype.now': '지금 히트', 'hype.how': '올리는 법', 'hype.howTxt': '미션 완료 · 빠른 주행 · 축제 참여',
+      'friends.rapidTitle': '공구 달성 보상', 'friends.rapidBanner': '5명 공구 달성! 40% 할인 + 래피드 세트 시리얼을 받았어요.',
+      'decorate.sub2': '어디에나 배치할 수 있어요. 드래그로 옮기고 탭으로 회전.',
+      'shop.rideHint': '코인으로 해제하거나 래피드 세트로 한 번에.',
+      'veh.enter': '탑승', 'veh.enterToast': '{name}에 탑승했어요', 'veh.exitToast': '내렸어요',
+      'veh.test': '시승', 'veh.testStart': '{n}초 무료 시승 시작!', 'veh.tooFar': '차량 가까이 가서 다시 눌러 주세요',
+      'welcome.worldTitle': 'MOA Village 오픈월드', 'welcome.worldBody': '마을을 걸어 다니고, 차를 타고, 미션을 해결하며 히트를 올려 보세요. M으로 지도, F로 탑승.',
+      'welcome.worldMove': '이동', 'welcome.worldDrive': '탑승 / 하차', 'welcome.worldMap': '월드 맵'
+    },
+    en: {
+      'mis.delivery': 'Express Delivery', 'mis.supply': 'Supply Drop', 'mis.pet': 'Pet Rescue', 'mis.festival': 'Street Festival',
+      'mis.sub.pickup': 'Pick up the parcel at the shop', 'mis.sub.deliver': 'Deliver it to the marker',
+      'mis.sub.supply': 'Find the dropped crate and open it', 'mis.sub.petFind': 'Find the lost pet',
+      'mis.sub.petHome': 'Walk it back home', 'mis.sub.festival': 'Build hype in the festival zone',
+      'mis.started': '{name} started! 💨', 'mis.completed': '{name} complete! +{coins} coins · +{xp} XP',
+      'mis.expired': 'Mission expired — next time!', 'mis.starUp': 'Hype up!', 'mis.levelUp': 'Level {n} reached!',
+      'map.title': 'World map', 'map.sub': 'Tap the map to drop a ping', 'map.hint': 'M', 'map.ping': 'Ping dropped',
+      'preview.kicker': 'RARE SET PREVIEW', 'preview.view': 'View Rapid set', 'preview.keep': 'Keep playing',
+      'serial.title': 'Serial code', 'serial.sub': 'Enter the code from Rapid to unlock village rares.',
+      'rapid.bundleCode': 'Bundle code', 'rapid.creatorBuy': 'Buy on Rapid',
+      'rapid.creatorDesc': 'MOA Daily · AI Setup Pack (₩9,900) — village rares plus VIP 2× coins in one bundle.',
+      'rapid.creatorOk': 'Rapid bundle code accepted — rares unlocked!', 'rapid.creatorShort': 'Rapid bundle',
+      'rapid.enterCode': 'Enter serial code', 'rapid.trialOk': 'Trial code applied — try the rares now.',
+      'rapid.trialTry': 'Try the trial code',
+      'showroom.title': 'MOA VIP Showroom', 'showroom.sub': 'Free 30-second test drives in the supercar and star sleigh.',
+      'showroom.note': 'Liked it? Unlock it for good on Rapid.',
+      'showroom.testCar': 'Test-drive supercar', 'showroom.testSleigh': 'Test-drive sleigh',
+      'showroom.browse': 'Unlock on Rapid', 'showroom.serial': 'Enter serial code',
+      'testdrive.title': 'Test drive over!', 'testdrive.body': 'Enjoyed it? Unlock it on Rapid and drive it anywhere in the village.',
+      'testdrive.unlock': 'Unlock on Rapid', 'testdrive.keep': 'Keep playing',
+      'profile.title': 'My profile', 'profile.sub': 'Your village record.', 'profile.level': 'Level',
+      'profile.xp': 'Experience', 'profile.missions': 'Missions done', 'profile.vip': 'VIP 2× coins',
+      'hype.title': 'Hype stars', 'hype.sub': 'Drive, deliver and party to raise your hype.',
+      'hype.now': 'Right now', 'hype.how': 'How to raise', 'hype.howTxt': 'Finish missions · speed · join festivals',
+      'friends.rapidTitle': 'Group-buy reward', 'friends.rapidBanner': '5-person group complete! 40% off and a Rapid set serial unlocked.',
+      'decorate.sub2': 'Place anywhere — drag to move, tap to rotate.',
+      'shop.rideHint': 'Unlock with coins, or grab a Rapid set.',
+      'veh.enter': 'Enter', 'veh.enterToast': 'You hopped on the {name}', 'veh.exitToast': 'You got off',
+      'veh.test': 'TEST', 'veh.testStart': '{n}s free test drive — go!', 'veh.tooFar': 'Walk closer to the vehicle',
+      'welcome.worldTitle': 'MOA Village open world', 'welcome.worldBody': 'Walk the streets, grab a ride, take on live missions and build hype. M for the map, F to hop in.',
+      'welcome.worldMove': 'Move', 'welcome.worldDrive': 'Enter / exit', 'welcome.worldMap': 'World map'
+    },
+    zh: {
+      'mis.delivery': '极速配送', 'mis.supply': '补给空投', 'mis.pet': '宠物救援', 'mis.festival': '街头庆典',
+      'mis.sub.pickup': '在商店领取包裹', 'mis.sub.deliver': '把包裹送到目的地',
+      'mis.sub.supply': '找到并打开空投箱', 'mis.sub.petFind': '找到走失的伙伴',
+      'mis.sub.petHome': '把它送回家', 'mis.sub.festival': '在庆典区积攒人气',
+      'mis.started': '{name} 开始！💨', 'mis.completed': '{name} 完成！+{coins} 金币 · +{xp} XP',
+      'mis.expired': '任务结束了，下次再来！', 'mis.starUp': '人气上升！', 'mis.levelUp': '升到 {n} 级！',
+      'map.title': '世界地图', 'map.sub': '点击地图标记位置', 'map.hint': 'M', 'map.ping': '已标记位置',
+      'preview.kicker': '稀有套装预览', 'preview.view': '查看 Rapid 套装', 'preview.keep': '继续游戏',
+      'serial.title': '序列号兑换', 'serial.sub': '输入 Rapid 提供的代码，解锁村庄稀有物品。',
+      'rapid.bundleCode': '套装代码', 'rapid.creatorBuy': '在 Rapid 购买',
+      'rapid.creatorDesc': 'MOA Daily · AI 设置包 9,900韩元 — 一次获得村庄稀有物品与 VIP 双倍金币。',
+      'rapid.creatorOk': 'Rapid 套装代码已确认，稀有物品已解锁！', 'rapid.creatorShort': 'Rapid 套装',
+      'rapid.enterCode': '输入序列号', 'rapid.trialOk': '体验码已使用，现在就能体验稀有物品。',
+      'rapid.trialTry': '试试体验码',
+      'showroom.title': 'MOA VIP 展厅', 'showroom.sub': '免费试驾超级跑车和星光雪橇 30 秒。',
+      'showroom.note': '喜欢的话可以在 Rapid 永久解锁。',
+      'showroom.testCar': '试驾超级跑车', 'showroom.testSleigh': '试驾雪橇',
+      'showroom.browse': '在 Rapid 永久解锁', 'showroom.serial': '输入序列号',
+      'testdrive.title': '试驾结束！', 'testdrive.body': '喜欢吗？在 Rapid 永久解锁后即可在村庄任意驾驶。',
+      'testdrive.unlock': '在 Rapid 永久解锁', 'testdrive.keep': '继续游戏',
+      'profile.title': '我的资料', 'profile.sub': '你在村里的记录。', 'profile.level': '等级',
+      'profile.xp': '经验值', 'profile.missions': '完成任务', 'profile.vip': 'VIP 双倍金币',
+      'hype.title': '人气 ★', 'hype.sub': '驾驶或完成任务都能提升人气。',
+      'hype.now': '当前', 'hype.how': '提升方法', 'hype.howTxt': '完成任务 · 高速驾驶 · 参加庆典',
+      'friends.rapidTitle': '拼团奖励', 'friends.rapidBanner': '五人拼团达成！40% 折扣与 Rapid 套装序列号已解锁。',
+      'decorate.sub2': '可以放在任何地方，拖动移动，点击旋转。',
+      'shop.rideHint': '用金币解锁，或用 Rapid 套装一次带走。',
+      'veh.enter': '上车', 'veh.enterToast': '已登上{name}', 'veh.exitToast': '已下车',
+      'veh.test': '试驾', 'veh.testStart': '{n} 秒免费试驾开始！', 'veh.tooFar': '请靠近车辆再试',
+      'welcome.worldTitle': 'MOA Village 开放世界', 'welcome.worldBody': '在村里漫步、开车、完成任务提升人气。M 看地图，F 上车。',
+      'welcome.worldMove': '移动', 'welcome.worldDrive': '上车 / 下车', 'welcome.worldMap': '世界地图'
+    },
+    ja: {
+      'mis.delivery': '特急デリバリー', 'mis.supply': '補給ドロップ', 'mis.pet': 'ペット救出', 'mis.festival': 'ストリートフェス',
+      'mis.sub.pickup': 'お店で荷物を受け取ろう', 'mis.sub.deliver': '目的地まで届けよう',
+      'mis.sub.supply': '落下した箱を探して開けよう', 'mis.sub.petFind': '迷子のペットを探そう',
+      'mis.sub.petHome': '家まで送り届けよう', 'mis.sub.festival': 'フェスエリアで盛り上げよう',
+      'mis.started': '{name} スタート！💨', 'mis.completed': '{name} クリア！+{coins} コイン · +{xp} XP',
+      'mis.expired': 'ミッション終了、また今度！', 'mis.starUp': 'ヒートアップ！', 'mis.levelUp': 'レベル {n} 達成！',
+      'map.title': 'ワールドマップ', 'map.sub': 'マップをタップしてピンを立てよう', 'map.hint': 'M', 'map.ping': 'ピンを立てました',
+      'preview.kicker': 'レアセット プレビュー', 'preview.view': 'Rapidセットを見る', 'preview.keep': '続けて遊ぶ',
+      'serial.title': 'シリアルコード', 'serial.sub': 'Rapidのコードを入れると村のレアアイテムが解放。',
+      'rapid.bundleCode': 'バンドルコード', 'rapid.creatorBuy': 'Rapidで購入',
+      'rapid.creatorDesc': 'MOA Daily・AIセットパック 9,900ウォン — 村のレアとVIPコイン2倍をまとめて。',
+      'rapid.creatorOk': 'Rapidバンドルコード確認、レア解放！', 'rapid.creatorShort': 'Rapidバンドル',
+      'rapid.enterCode': 'シリアルコード入力', 'rapid.trialOk': '体験コード適用、今すぐレアをどうぞ。',
+      'rapid.trialTry': '体験コードを試す',
+      'showroom.title': 'MOA VIP ショールーム', 'showroom.sub': 'スーパーカーと星あかりのそりを30秒無料試乗。',
+      'showroom.note': '気に入ったらRapidで永久解放できます。',
+      'showroom.testCar': 'スーパーカー試乗', 'showroom.testSleigh': 'そり試乗',
+      'showroom.browse': 'Rapidで永久解放', 'showroom.serial': 'シリアルコード入力',
+      'testdrive.title': '試乗終了！', 'testdrive.body': 'お気に入りですか？Rapidで解放すれば村中どこでも乗れます。',
+      'testdrive.unlock': 'Rapidで解放', 'testdrive.keep': '続けて遊ぶ',
+      'profile.title': 'マイプロフィール', 'profile.sub': '村での記録です。', 'profile.level': 'レベル',
+      'profile.xp': '経験値', 'profile.missions': 'クリアしたミッション', 'profile.vip': 'VIPコイン2倍',
+      'hype.title': 'ヒート ★', 'hype.sub': '走る・届ける・盛り上げるでヒートが上がります。',
+      'hype.now': '現在', 'hype.how': '上げ方', 'hype.howTxt': 'ミッション・スピード走行・フェス参加',
+      'friends.rapidTitle': '共同購入の特典', 'friends.rapidBanner': '5人共同購入達成！40%オフとRapidセットのシリアルを獲得。',
+      'decorate.sub2': 'どこにでも置けます。ドラッグで移動、タップで回転。',
+      'shop.rideHint': 'コインで解放、またはRapidセットでまとめて。',
+      'veh.enter': '乗る', 'veh.enterToast': '{name}に乗りました', 'veh.exitToast': '降りました',
+      'veh.test': '試乗', 'veh.testStart': '{n}秒の無料試乗スタート！', 'veh.tooFar': '車にもっと近づいてね',
+      'welcome.worldTitle': 'MOA Village オープンワールド', 'welcome.worldBody': '街を歩き、乗り物に乗り、ミッションでヒートを上げよう。Mでマップ、Fで乗車。',
+      'welcome.worldMove': '移動', 'welcome.worldDrive': '乗車 / 降車', 'welcome.worldMap': 'ワールドマップ'
+    }
+  };
+  Object.keys(V2).forEach(l => { Object.assign(I18N[l], V2[l]); });
+
+  /* ---- v2 world labels: districts, landmarks, map legend, perks, hype lines ---- */
+  const V3 = {
+    ko: {
+      'dist.plaza': '중앙 광장', 'dist.plaza.sub': '마을의 심장, 분수와 버스킹',
+      'dist.shop': '상점가', 'dist.shop.sub': '오너먼트와 라이드가 모인 곳',
+      'dist.home': '주거 구역', 'dist.home.sub': '내 집과 이웃들',
+      'dist.park': '공원', 'dist.park.sub': '산책로와 호수',
+      'dist.harbor': '항구', 'dist.harbor.sub': '부두와 등대',
+      'lm.home': '내 집', 'lm.hall': '마을 회관', 'lm.fountain': '중앙 분수', 'lm.gazebo': '정자',
+      'lm.pier': '부두', 'lm.market': '시장', 'lm.park': '공원 입구', 'lm.stage': '공연 무대',
+      'lm.light': '등대', 'lm.showroom': 'VIP 쇼룸',
+      'map.you': '나', 'map.mission': '미션', 'map.vehicles': '탈것', 'map.ornaments': '오너먼트', 'map.npcs': '주민',
+      'perk.supercar': '슈퍼카 해제', 'perk.sleigh': '별빛 썰매 해제', 'perk.rabbit': '달토끼 펫',
+      'perk.coins2': 'VIP 코인 2배', 'perk.orn3': '희귀 오너먼트 3종', 'perk.orn4': '독점 오너먼트 4종',
+      'perk.viporn': 'VIP 전용 오너먼트', 'perk.trial': '체험 코드 적용',
+      'npc.star1': '동네가 살짝 들썩여요 ★', 'npc.star2': '사람들이 몰려오고 있어요 ★★',
+      'npc.star3': '마을이 축제 분위기! ★★★', 'npc.star4': '온 동네가 난리 났어요 ★★★★',
+      'npc.star5': 'MOA Village 최고 히트! ★★★★★'
+    },
+    en: {
+      'dist.plaza': 'Central Plaza', 'dist.plaza.sub': 'The heart of the village',
+      'dist.shop': 'Shop Street', 'dist.shop.sub': 'Ornaments and rides',
+      'dist.home': 'Home Quarter', 'dist.home.sub': 'Your house and neighbours',
+      'dist.park': 'Park', 'dist.park.sub': 'Paths and the lake',
+      'dist.harbor': 'Harbor', 'dist.harbor.sub': 'Docks and lighthouse',
+      'lm.home': 'My House', 'lm.hall': 'Village Hall', 'lm.fountain': 'Central Fountain', 'lm.gazebo': 'Gazebo',
+      'lm.pier': 'Pier', 'lm.market': 'Market', 'lm.park': 'Park Gate', 'lm.stage': 'Stage',
+      'lm.light': 'Lighthouse', 'lm.showroom': 'VIP Showroom',
+      'map.you': 'You', 'map.mission': 'Mission', 'map.vehicles': 'Rides', 'map.ornaments': 'Ornaments', 'map.npcs': 'Villagers',
+      'perk.supercar': 'Supercar unlocked', 'perk.sleigh': 'Star sleigh unlocked', 'perk.rabbit': 'Moon Rabbit pet',
+      'perk.coins2': 'VIP 2× coins', 'perk.orn3': '3 rare ornaments', 'perk.orn4': '4 exclusive ornaments',
+      'perk.viporn': 'VIP-only ornament', 'perk.trial': 'Trial code applied',
+      'npc.star1': 'The street is stirring ★', 'npc.star2': 'A crowd is forming ★★',
+      'npc.star3': 'The village feels like a festival ★★★', 'npc.star4': 'The whole town is buzzing ★★★★',
+      'npc.star5': 'MOA Village overdrive! ★★★★★'
+    },
+    zh: {
+      'dist.plaza': '中央广场', 'dist.plaza.sub': '村庄的心脏',
+      'dist.shop': '商店街', 'dist.shop.sub': '装饰与坐骑',
+      'dist.home': '住宅区', 'dist.home.sub': '我的家与邻居',
+      'dist.park': '公园', 'dist.park.sub': '步道与湖泊',
+      'dist.harbor': '港口', 'dist.harbor.sub': '码头与灯塔',
+      'lm.home': '我的家', 'lm.hall': '村庄会馆', 'lm.fountain': '中央喷泉', 'lm.gazebo': '凉亭',
+      'lm.pier': '码头', 'lm.market': '市场', 'lm.park': '公园入口', 'lm.stage': '舞台',
+      'lm.light': '灯塔', 'lm.showroom': 'VIP 展厅',
+      'map.you': '我', 'map.mission': '任务', 'map.vehicles': '坐骑', 'map.ornaments': '装饰', 'map.npcs': '村民',
+      'perk.supercar': '解锁超级跑车', 'perk.sleigh': '解锁星光雪橇', 'perk.rabbit': '月兔宠物',
+      'perk.coins2': 'VIP 双倍金币', 'perk.orn3': '3 件稀有装饰', 'perk.orn4': '4 件独家装饰',
+      'perk.viporn': 'VIP 专属装饰', 'perk.trial': '体验码已生效',
+      'npc.star1': '街区有点热闹了 ★', 'npc.star2': '人群正在聚集 ★★',
+      'npc.star3': '村里像庆典一样 ★★★', 'npc.star4': '整个小镇都沸腾了 ★★★★',
+      'npc.star5': 'MOA Village 人气爆棚！★★★★★'
+    },
+    ja: {
+      'dist.plaza': '中央広場', 'dist.plaza.sub': '村の中心',
+      'dist.shop': '商店街', 'dist.shop.sub': 'オーナメントと乗り物',
+      'dist.home': '住宅エリア', 'dist.home.sub': 'わが家とご近所',
+      'dist.park': '公園', 'dist.park.sub': '散歩道と湖',
+      'dist.harbor': '港', 'dist.harbor.sub': '波止場と灯台',
+      'lm.home': 'わが家', 'lm.hall': '村の公会堂', 'lm.fountain': '中央噴水', 'lm.gazebo': 'あずまや',
+      'lm.pier': '桟橋', 'lm.market': '市場', 'lm.park': '公園の入口', 'lm.stage': 'ステージ',
+      'lm.light': '灯台', 'lm.showroom': 'VIPショールーム',
+      'map.you': 'あなた', 'map.mission': 'ミッション', 'map.vehicles': '乗り物', 'map.ornaments': 'オーナメント', 'map.npcs': '住民',
+      'perk.supercar': 'スーパーカー解放', 'perk.sleigh': '星あかりのそり解放', 'perk.rabbit': '月うさぎペット',
+      'perk.coins2': 'VIPコイン2倍', 'perk.orn3': 'レアオーナメント3点', 'perk.orn4': '限定オーナメント4点',
+      'perk.viporn': 'VIP限定オーナメント', 'perk.trial': '体験コード適用',
+      'npc.star1': '通りが少しざわついてきた ★', 'npc.star2': '人が集まってきた ★★',
+      'npc.star3': '村がお祭り気分！★★★', 'npc.star4': '町じゅうが大騒ぎ ★★★★',
+      'npc.star5': 'MOA Village 最高ヒート！★★★★★'
+    }
+  };
+  Object.keys(V3).forEach(l => { Object.assign(I18N[l], V3[l]); });
+
+
+  const VEH_NAMES = {
+    minicar: ['미니카', 'Mini Car', '小汽车', 'ミニカー'],
+    supercar: ['슈퍼카', 'Supercar', '超级跑车', 'スーパーカー']
+  };
+  const NPC_LINES = [
+    ['안녕하세요!', '오늘 마을 어땠어요?', '광장에 축제 열렸대요!', '차 조심해요~', '여기 경치 좋죠?', '또 만나요!'],
+    ['Hello there!', 'Nice day in the village, huh?', 'There is a festival at the square!', 'Watch for traffic!', 'Great view from here.', 'See you around!'],
+    ['你好！', '今天村子怎么样？', '广场上要开庆典了！', '小心车辆～', '这里景色真好。', '再见！'],
+    ['こんにちは！', '今日の村はどう？', '広場でフェスだって！', '車に気をつけて〜', 'ここ景色いいね。', 'またね！']
+  ];
+
   const LANG_INDEX = { ko: 0, en: 1, zh: 2, ja: 3 };
   const LANGS = ['ko', 'en', 'zh', 'ja'];
 
@@ -406,6 +628,14 @@
       return s;
     },
     has(key) { return (I18N[this.lang] || I18N.ko)[key] != null || I18N.ko[key] != null; },
+    vehicleName(id) {
+      const r = VEH_NAMES[id];
+      return r ? r[LANG_INDEX[this.lang] || 0] : this.rideName(id);
+    },
+    npcLine(i) {
+      const rows = NPC_LINES[LANG_INDEX[this.lang] || 0] || NPC_LINES[0];
+      return rows[Math.abs(i) % rows.length];
+    },
     itemName(id) {
       const row = ITEM_NAMES[id];
       return row ? row[LANG_INDEX[this.lang] || 0] : id;

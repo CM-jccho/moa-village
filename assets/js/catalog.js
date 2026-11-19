@@ -8,6 +8,17 @@
      (래피드 상품 페이지: https://www.latpeed.com/products/xxxxx)            */
   const RAPID = {
     storeUrl: 'https://www.latpeed.com/',
+    /* 실제 판매 중인 래피드 상품 — MOA Daily · AI 세팅 팩 (9,900원) */
+    creator: {
+      id: 'creator',
+      name: ['MOA Daily · AI 세팅 팩', 'MOA Daily · AI Set-up Pack', 'MOA Daily · AI 套装包', 'MOA Daily · AIセットアップパック'],
+      price: 9900,
+      url: 'https://www.latpeed.com/products/VTtxq',
+      code: 'MOA-VIP-2026',
+      perks: ['perk.coins2', 'perk.supercar', 'perk.viporn', 'perk.rabbit'],
+      items: ['kite', 'gbell'],
+      pets: ['moonrabbit']
+    },
     trialCode: 'MOA-TRIAL-2026',
     sets: [
       {
@@ -16,16 +27,18 @@
         desc: ['얼음 수정 · 리스 · 스노우 글로브 · 오로라 램프 + 달토끼', 'Ice Crystal · Wreath · Snow Globe · Aurora Lamp + Moon Rabbit', '冰晶 · 花环 · 雪花球 · 极光灯 + 月兔', '氷の結晶 · リース · スノーグローブ · オーロラランプ + 月うさぎ'],
         items: ['crystal', 'wreath', 'snowglobe', 'aurora'],
         pets: ['moonrabbit'],
+        perks: ['perk.supercar', 'perk.rabbit', 'perk.orn4'],
         code: 'MOA-SNOW-2026',
-        buyUrl: 'https://www.latpeed.com/products/moa-village-snowbell'
+        buyUrl: 'https://www.latpeed.com/products/VTtxq'
       },
       {
         id: 'sunset', accent: '#ffd08a', glow: '#f2a24b', price: 12900,
         name: ['해바람 레어 세트', 'Sunpetal Rare Set', '日光花瓣稀有套装', 'ひだまりレアセット'],
         desc: ['회전목마 · 풍차 · 여우 등불', 'Carousel · Windmill · Lantern Fox', '旋转木马 · 风车 · 灯笼狐狸', 'メリーゴーランド · 風車 · 灯籠狐'],
         items: ['carousel', 'windmill', 'fox'],
+        perks: ['perk.sleigh', 'perk.orn3', 'perk.coins2'],
         code: 'MOA-SUNN-2026',
-        buyUrl: 'https://www.latpeed.com/products/moa-village-sunpetal'
+        buyUrl: 'https://www.latpeed.com/products/VTtxq'
       },
       {
         id: 'lumen', accent: '#c9b4ff', glow: '#9a7bff', price: 14900,
@@ -33,14 +46,18 @@
         desc: ['별사슴 · 혜성 연 · 달빛 문 · 황금 종 + 썰매', 'Star Deer · Comet Kite · Moon Gate · Golden Bell + Sleigh', '星鹿 · 彗星风筝 · 月光门 · 金铃 + 雪橇', '星鹿 · 彗星凧 · 月の門 · 黄金の鐘 + そり'],
         items: ['deer', 'kite', 'gate', 'gbell'],
         rides: ['sleigh'],
+        perks: ['perk.rabbit', 'perk.sleigh', 'perk.orn4'],
         code: 'MOA-LUMN-2026',
-        buyUrl: 'https://www.latpeed.com/products/moa-village-lumen'
+        buyUrl: 'https://www.latpeed.com/products/VTtxq'
       }
     ],
     byCode(code) {
       const c = String(code || '').trim().toUpperCase().replace(/\s+/g, '');
-      if (c === this.trialCode) return { trial: true, items: ['gate'], name: ['체험 선물', 'Trial gift', '体验礼物', '体験ギフト'] };
-      for (const s of this.sets) if (s.code === c) return { set: s, items: s.items };
+      if (c === this.trialCode) return { trial: true, items: ['gate'], perks: ['perk.trial'], name: ['체험 선물', 'Trial gift', '体验礼物', '体験ギフト'] };
+      if (c === this.creator.code) {
+        return { creator: true, items: this.creator.items, pets: this.creator.pets, perks: this.creator.perks, name: this.creator.name, url: this.creator.url };
+      }
+      for (const s of this.sets) if (s.code === c) return { set: s, items: s.items, perks: s.perks || [] };
       return null;
     }
   };
@@ -383,6 +400,34 @@
       '<circle cx="78" cy="30" r="4" fill="#8cc8b4"/>' +
       '<path d="M64 30 q6 -6 12 0" stroke="#e8dcc6" stroke-width="2" fill="none"/>' +
       '</svg>',
+    car: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 64">' +
+      '<ellipse cx="50" cy="57" rx="34" ry="4.6" fill="#1d1a2b" opacity=".16"/>' +
+      '<path d="M14 46 q0 -10 8 -11 l8 -1 q6 -13 20 -13 q14 0 19 13 l13 2 q8 2 8 10 v5 q0 4 -5 4 h-66 q-5 0 -5 -4z" fill="url(#cg)"/>' +
+      '<defs><linearGradient id="cg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8cc8b4"/><stop offset=".55" stop-color="#5fae97"/><stop offset="1" stop-color="#3f8a76"/></linearGradient></defs>' +
+      '<path d="M32 22 q6 -8 16 -8 q11 0 16 8z" fill="#dff2f8"/>' +
+      '<path d="M50 14 v8" stroke="#3f8a76" stroke-width="1.6" opacity=".5"/>' +
+      '<path d="M20 35 h58" stroke="#ffffff" stroke-width="2" opacity=".35"/>' +
+      '<circle cx="28" cy="51" r="8" fill="#2f2a44"/><circle cx="28" cy="51" r="3.2" fill="#e8eefb"/>' +
+      '<circle cx="73" cy="51" r="8" fill="#2f2a44"/><circle cx="73" cy="51" r="3.2" fill="#e8eefb"/>' +
+      '<rect x="84" y="35" width="7" height="5" rx="2" fill="#ffe6a8"/>' +
+      '<rect x="11" y="35" width="6" height="4" rx="2" fill="#ffb3a0"/>' +
+      '<circle cx="50" cy="32" r="3" fill="#ffe6a8" opacity=".75"/>' +
+      '</svg>',
+    supercar: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 116 58">' +
+      '<ellipse cx="58" cy="52" rx="42" ry="4" fill="#1d1a2b" opacity=".2"/>' +
+      '<path d="M8 43 q1 -9 12 -11 l14 -2 q9 -11 24 -11 q15 0 22 11 l16 3 q8 2 8 9 v3 q0 4 -5 4 h-86 q-5 0 -5 -4z" fill="url(#sc)"/>' +
+      '<defs><linearGradient id="sc" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffd08a"/><stop offset=".45" stop-color="#f0715c"/><stop offset="1" stop-color="#b8324a"/></linearGradient></defs>' +
+      '<path d="M33 30 q8 -9 20 -9 q13 0 19 9z" fill="#2b2540"/>' +
+      '<path d="M37 29 q7 -7 16 -7 q10 0 15 7z" fill="#9fd8ee" opacity=".85"/>' +
+      '<path d="M12 41 h86" stroke="#ffe9c4" stroke-width="2.4" opacity=".55"/>' +
+      '<path d="M96 25 l12 3 0 5 -14 -2z" fill="#c9d3e8"/>' +
+      '<path d="M100 24 h12 v3 h-12z" fill="#ffd08a"/>' +
+      '<circle cx="32" cy="47" r="9" fill="#242036"/><circle cx="32" cy="47" r="4" fill="#e8eefb"/><circle cx="32" cy="47" r="1.6" fill="#9aa6bb"/>' +
+      '<circle cx="82" cy="47" r="9" fill="#242036"/><circle cx="82" cy="47" r="4" fill="#e8eefb"/><circle cx="82" cy="47" r="1.6" fill="#9aa6bb"/>' +
+      '<path d="M104 36 l8 1 -2 4 -7 -1z" fill="#fff3c4"/>' +
+      '<circle cx="105" cy="38" r="3.4" fill="#fff8dc" opacity=".9"/>' +
+      '<path d="M22 34 h16" stroke="#fff" stroke-width="2" opacity=".35"/>' +
+      '</svg>',
     tram: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 72">' +
       '<ellipse cx="48" cy="64" rx="34" ry="5" fill="#1d1a2b" opacity=".16"/>' +
       '<path d="M20 18 h56 q6 0 6 6 v26 q0 6 -6 6 h-56 q-6 0 -6 -6 v-26 q0 -6 6 -6z" fill="#e2614c"/>' +
@@ -444,15 +489,26 @@
     { id: 'moonrabbit', price: null, rapid: true, speed: 22, start: .55 }
   ];
   const RIDES = [
-    { id: 'bike', price: 0, speed: 46, path: 'road' },
-    { id: 'scooter', price: 240, speed: 58, path: 'road' },
+    { id: 'bike', price: 0, speed: 46, path: 'road', vehicle: true },
+    { id: 'scooter', price: 240, speed: 58, path: 'road', vehicle: true },
     { id: 'balloon', price: 480, speed: 14, path: 'air' },
-    { id: 'tram', price: 620, speed: 30, path: 'road' },
-    { id: 'sleigh', price: null, rapid: true, speed: 40, path: 'road' }
+    { id: 'tram', price: 620, speed: 30, path: 'road', vehicle: true },
+    { id: 'sleigh', price: null, rapid: true, speed: 40, path: 'road', vehicle: true },
+    { id: 'supercar', price: null, rapid: true, speed: 60, path: 'road', vehicle: true }
   ];
 
+  /* ---------------- drivable vehicles (v2 open world) ---------------- */
+  const VEHICLES = {
+    minicar: { sprite: 'car', max: 330, accel: 360, turn: 2.9, offroad: .55, horn: 'beep', scale: 1.0 },
+    supercar: { sprite: 'supercar', max: 540, accel: 620, turn: 3.6, offroad: .42, horn: 'sport', scale: 1.05, premium: true },
+    bike: { sprite: 'bike', max: 250, accel: 260, turn: 4.2, offroad: .7, horn: 'ring', scale: .86 },
+    scooter: { sprite: 'scooter', max: 320, accel: 330, turn: 3.6, offroad: .62, horn: 'beep', scale: .82 },
+    tram: { sprite: 'tram', max: 300, accel: 240, turn: 2.2, offroad: .38, horn: 'ding', scale: 1.12, heavy: true },
+    sleigh: { sprite: 'sleigh', max: 460, accel: 470, turn: 3.2, offroad: .8, horn: 'bells', scale: 1.0 }
+  };
+
   MV.Catalog = {
-    RAPID, VILLAGES, ORN, PETS, RIDES,
+    RAPID, VILLAGES, ORN, PETS, RIDES, VEHICLES,
     SPR, PET_SPR, RIDE_SPR, AVATAR,
     TREND_FALLBACK: [
       { id: 'gbell', score: 98 }, { id: 'aurora', score: 94 }, { id: 'deer', score: 91 },
@@ -462,6 +518,7 @@
     village(id) { return VILLAGES.find(v => v.id === id) || VILLAGES[0]; },
     pet(id) { return PETS.find(p => p.id === id) || null; },
     ride(id) { return RIDES.find(r => r.id === id) || null; },
+    vehicle(id) { return VEHICLES[id] || null; },
     setName(set) {
       const i = { ko: 0, en: 1, zh: 2, ja: 3 }[MV.I18n.lang] || 0;
       return set.name ? set.name[i] : set.id;
@@ -480,7 +537,11 @@
     },
     rideData(id) {
       const svg = RIDE_SPR[id];
-      return svg ? 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg) : null;
+      if (svg) return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+      /* vehicles (supercar, minicar, …) share the vehicle sprite sheet */
+      const cfg = VEHICLES[id];
+      const art = cfg && RIDE_SPR[cfg.sprite];
+      return art ? 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(art) : null;
     },
     avatarData() {
       return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(AVATAR);
