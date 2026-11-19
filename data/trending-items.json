@@ -1,0 +1,46 @@
+{
+  "generated_at": "2026-11-19T09:00:25Z",
+  "hour_label": "2026-11-19T18",
+  "source": "rotation",
+  "feeds_read": 2,
+  "feed_sample": [
+    "대법관",
+    "수능 답지",
+    "수능 등급컷",
+    "수능 끝",
+    "라미란"
+  ],
+  "keywords": [],
+  "items": [
+    {
+      "id": "fence",
+      "score": 84,
+      "tag": "rotation"
+    },
+    {
+      "id": "wreath",
+      "score": 78,
+      "tag": "rotation"
+    },
+    {
+      "id": "aurora",
+      "score": 72,
+      "tag": "rotation"
+    },
+    {
+      "id": "flag",
+      "score": 66,
+      "tag": "rotation"
+    },
+    {
+      "id": "snowglobe",
+      "score": 60,
+      "tag": "rotation"
+    },
+    {
+      "id": "gate",
+      "score": 55,
+      "tag": "rotation"
+    }
+  ]
+}

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<meta name="theme-color" content="#20233c">
+<title>MOA Village</title>
+<meta name="description" content="MOA Village — collect cozy villages, place ornaments, meet pets and rides, and gift rare pieces to friends.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<div id="app" class="app">
+
+  <canvas id="scene" aria-label="village scene"></canvas>
+  <div class="scene-tint" id="sceneTint"></div>
+
+  <header class="hud">
+    <div class="hud-left">
+      <button class="chip coin" id="coinChip" title="coins">
+        <span class="chip-ico">🪙</span><span id="coinCount">0</span>
+      </button>
+      <button class="chip spark" id="sparkChip" title="sparkles">
+        <span class="chip-ico">✨</span><span id="sparkCount">0</span>
+      </button>
+      <button class="chip village-chip" id="villageChip">
+        <span id="villageEmoji">❄️</span>
+        <span id="villageName">Snowbell</span>
+      </button>
+    </div>
+    <div class="hud-right">
+      <div class="seg lang-seg" id="langSeg" role="group" aria-label="language">
+        <button data-lang="ko">KO</button>
+        <button data-lang="en">EN</button>
+        <button data-lang="zh">中</button>
+        <button data-lang="ja">日</button>
+      </div>
+      <button class="icon-btn" id="weatherBtn" aria-label="weather">
+        <span id="weatherIcon">☀️</span>
+      </button>
+    </div>
+  </header>
+
+  <div class="weather-bar" id="weatherBar">
+    <button data-w="auto" data-i18n="weather.auto">Auto</button>
+    <button data-w="clear"><span>☀️</span><em data-i18n="weather.clear">Clear</em></button>
+    <button data-w="rain"><span>🌧️</span><em data-i18n="weather.rain">Rain</em></button>
+    <button data-w="snow"><span>❄️</span><em data-i18n="weather.snow">Snow</em></button>
+    <button data-w="sunset"><span>🌇</span><em data-i18n="weather.sunset">Sunset</em></button>
+    <button data-w="night"><span>🌙</span><em data-i18n="weather.night">Night</em></button>
+  </div>
+
+  <button class="trend-strip" id="trendStrip" hidden>
+    <span class="trend-live" id="trendLive">LIVE</span>
+    <span class="trend-label" data-i18n="trend.top">Trending now</span>
+    <span class="trend-items" id="trendItems"></span>
+    <span class="trend-time" id="trendTime"></span>
+  </button>
+
+  <div class="bubble-layer" id="bubbleLayer"></div>
+
+  <div class="toast-wrap" id="toastWrap"></div>
+
+  <div class="tip" id="tip"><span id="tipText"></span></div>
+
+  <nav class="dock" id="dock">
+    <button class="dock-btn" data-panel="villages">
+      <span class="di">🏘️</span><span class="dl" data-i18n="dock.villages">Villages</span>
+    </button>
+    <button class="dock-btn" data-panel="shop">
+      <span class="di">🛍️</span><span class="dl" data-i18n="dock.shop">Shop</span>
+    </button>
+    <button class="dock-btn" data-panel="decorate">
+      <span class="di">🎨</span><span class="dl" data-i18n="dock.decorate">Decorate</span>
+    </button>
+    <button class="dock-btn" data-panel="friends">
+      <span class="di">👥</span><span class="dl" data-i18n="dock.friends">Friends</span>
+    </button>
+    <button class="dock-btn" data-panel="rapid">
+      <span class="di">💎</span><span class="dl" data-i18n="dock.rapid">Rare sets</span>
+    </button>
+  </nav>
+
+  <div class="sheet-scrim" id="scrim"></div>
+  <section class="sheet" id="sheet" aria-modal="true" role="dialog">
+    <div class="sheet-grip"></div>
+    <div class="sheet-head">
+      <div class="sheet-title-wrap">
+        <h2 id="sheetTitle">Title</h2>
+        <p id="sheetSub">Sub</p>
+      </div>
+      <button class="close-btn" id="sheetClose" aria-label="close">✕</button>
+    </div>
+    <div class="sheet-body" id="sheetBody"></div>
+  </section>
+
+  <div class="modal-scrim" id="modalScrim"></div>
+  <div class="modal" id="modal" role="dialog" aria-modal="true">
+    <div class="modal-card" id="modalCard"></div>
+  </div>
+
+  <div class="fx-layer" id="fxLayer"></div>
+
+</div>
+
+<script src="assets/js/i18n.js"></script>
+<script src="assets/js/catalog.js"></script>
+<script src="assets/js/store.js"></script>
+<script src="assets/js/scene.js"></script>
+<script src="assets/js/ui.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>
