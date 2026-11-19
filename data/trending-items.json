@@ -1,44 +1,46 @@
 {
-  "generated_at": "2026-11-19T09:38:50Z",
-  "hour_label": "2026-11-19T18",
-  "source": "rotation",
+  "generated_at": "2026-11-19T18:57:49Z",
+  "hour_label": "2026-11-20T03",
+  "source": "google-trends-rss+rotation",
   "feeds_read": 2,
   "feed_sample": [
-    "사건",
-    "국어 수능",
-    "수능 답지",
-    "수능 등급컷",
-    "수능 끝"
+    "웹툰",
+    "amd",
+    "플라비오 코볼리",
+    "엔화",
+    "kt wiz"
   ],
-  "keywords": [],
+  "keywords": [
+    "플라비오 코볼리"
+  ],
   "items": [
     {
-      "id": "fence",
-      "score": 84,
-      "tag": "rotation"
+      "id": "well",
+      "score": 98,
+      "tag": "feed"
     },
     {
-      "id": "wreath",
-      "score": 78,
-      "tag": "rotation"
+      "id": "boot",
+      "score": 95,
+      "tag": "feed"
     },
     {
-      "id": "aurora",
-      "score": 72,
-      "tag": "rotation"
+      "id": "mushroom",
+      "score": 92,
+      "tag": "feed"
     },
     {
-      "id": "flag",
+      "id": "gate",
       "score": 66,
       "tag": "rotation"
     },
     {
-      "id": "snowglobe",
+      "id": "pine",
       "score": 60,
       "tag": "rotation"
     },
     {
-      "id": "gate",
+      "id": "bell",
       "score": 55,
       "tag": "rotation"
     }
