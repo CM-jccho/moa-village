@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-11-19T09:00:25Z",
+  "generated_at": "2026-11-19T09:38:50Z",
   "hour_label": "2026-11-19T18",
   "source": "rotation",
   "feeds_read": 2,
   "feed_sample": [
-    "대법관",
+    "사건",
+    "국어 수능",
     "수능 답지",
     "수능 등급컷",
-    "수능 끝",
-    "라미란"
+    "수능 끝"
   ],
   "keywords": [],
   "items": [
