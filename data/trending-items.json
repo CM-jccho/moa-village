@@ -1,18 +1,17 @@
 {
-  "generated_at": "2026-11-20T17:44:51Z",
-  "hour_label": "2026-11-21T02",
+  "generated_at": "2026-11-20T23:57:56Z",
+  "hour_label": "2026-11-21T08",
   "source": "google-trends-rss+rotation",
   "feeds_read": 2,
   "feed_sample": [
-    "india a cricket team vs nepal national cricket team standings",
-    "세계사 2 번",
-    "공포지수",
-    "연준",
-    "부동산"
+    "mu",
+    "경찰관",
+    "nvda",
+    "한국항공우주산업",
+    "연예인"
   ],
   "keywords": [
-    "연준",
-    "엔비디아"
+    "연예인"
   ],
   "items": [
     {
@@ -21,27 +20,27 @@
       "tag": "feed"
     },
     {
-      "id": "well",
-      "score": 95,
-      "tag": "feed"
+      "id": "crystal",
+      "score": 78,
+      "tag": "rotation"
     },
     {
-      "id": "boot",
-      "score": 92,
-      "tag": "feed"
+      "id": "bench",
+      "score": 72,
+      "tag": "rotation"
     },
     {
-      "id": "mushroom",
-      "score": 90,
-      "tag": "feed"
+      "id": "fence",
+      "score": 66,
+      "tag": "rotation"
     },
     {
-      "id": "snowglobe",
+      "id": "bell",
       "score": 60,
       "tag": "rotation"
     },
     {
-      "id": "gate",
+      "id": "candy",
       "score": 55,
       "tag": "rotation"
     }
