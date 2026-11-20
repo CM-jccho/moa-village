@@ -1,46 +1,47 @@
 {
-  "generated_at": "2026-11-20T08:32:38Z",
-  "hour_label": "2026-11-20T17",
+  "generated_at": "2026-11-20T17:44:51Z",
+  "hour_label": "2026-11-21T02",
   "source": "google-trends-rss+rotation",
   "feeds_read": 2,
   "feed_sample": [
-    "교수",
-    "임지열",
-    "이범호",
-    "마마 2026",
-    "fifa u-17 월드컵"
+    "india a cricket team vs nepal national cricket team standings",
+    "세계사 2 번",
+    "공포지수",
+    "연준",
+    "부동산"
   ],
   "keywords": [
-    "mobland season 2 episode 10"
+    "연준",
+    "엔비디아"
   ],
   "items": [
     {
-      "id": "flag",
+      "id": "kite",
       "score": 98,
       "tag": "feed"
     },
     {
-      "id": "lamp",
-      "score": 94,
+      "id": "well",
+      "score": 95,
       "tag": "feed"
     },
     {
-      "id": "bench",
+      "id": "boot",
+      "score": 92,
+      "tag": "feed"
+    },
+    {
+      "id": "mushroom",
       "score": 90,
       "tag": "feed"
     },
     {
-      "id": "candy",
-      "score": 66,
-      "tag": "rotation"
-    },
-    {
-      "id": "wreath",
+      "id": "snowglobe",
       "score": 60,
       "tag": "rotation"
     },
     {
-      "id": "boot",
+      "id": "gate",
       "score": 55,
       "tag": "rotation"
     }
