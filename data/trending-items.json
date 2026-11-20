@@ -1,48 +1,50 @@
 {
-  "generated_at": "2026-11-19T18:57:49Z",
-  "hour_label": "2026-11-20T03",
+  "generated_at": "2026-11-20T01:14:22Z",
+  "hour_label": "2026-11-20T10",
   "source": "google-trends-rss+rotation",
   "feeds_read": 2,
   "feed_sample": [
-    "웹툰",
-    "amd",
-    "플라비오 코볼리",
-    "엔화",
-    "kt wiz"
+    "논현동",
+    "이의리",
+    "유니클로",
+    "h&m",
+    "php 취약점"
   ],
   "keywords": [
-    "플라비오 코볼리"
+    "전북특별자치도교육청",
+    "비상식량",
+    "is deni avdija playing tonight"
   ],
   "items": [
     {
-      "id": "well",
+      "id": "star",
       "score": 98,
       "tag": "feed"
     },
     {
-      "id": "boot",
+      "id": "deer",
       "score": 95,
       "tag": "feed"
     },
     {
-      "id": "mushroom",
+      "id": "well",
       "score": 92,
       "tag": "feed"
     },
     {
-      "id": "gate",
-      "score": 66,
-      "tag": "rotation"
+      "id": "lamp",
+      "score": 92,
+      "tag": "feed"
     },
     {
-      "id": "pine",
+      "id": "fence",
       "score": 60,
       "tag": "rotation"
     },
     {
-      "id": "bell",
-      "score": 55,
-      "tag": "rotation"
+      "id": "gate",
+      "score": 89,
+      "tag": "feed"
     }
   ]
 }
