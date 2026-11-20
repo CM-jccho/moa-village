@@ -1,50 +1,48 @@
 {
-  "generated_at": "2026-11-20T01:14:22Z",
-  "hour_label": "2026-11-20T10",
+  "generated_at": "2026-11-20T08:32:38Z",
+  "hour_label": "2026-11-20T17",
   "source": "google-trends-rss+rotation",
   "feeds_read": 2,
   "feed_sample": [
-    "논현동",
-    "이의리",
-    "유니클로",
-    "h&m",
-    "php 취약점"
+    "교수",
+    "임지열",
+    "이범호",
+    "마마 2026",
+    "fifa u-17 월드컵"
   ],
   "keywords": [
-    "전북특별자치도교육청",
-    "비상식량",
-    "is deni avdija playing tonight"
+    "mobland season 2 episode 10"
   ],
   "items": [
     {
-      "id": "star",
+      "id": "flag",
       "score": 98,
       "tag": "feed"
     },
     {
-      "id": "deer",
-      "score": 95,
-      "tag": "feed"
-    },
-    {
-      "id": "well",
-      "score": 92,
-      "tag": "feed"
-    },
-    {
       "id": "lamp",
-      "score": 92,
+      "score": 94,
       "tag": "feed"
     },
     {
-      "id": "fence",
+      "id": "bench",
+      "score": 90,
+      "tag": "feed"
+    },
+    {
+      "id": "candy",
+      "score": 66,
+      "tag": "rotation"
+    },
+    {
+      "id": "wreath",
       "score": 60,
       "tag": "rotation"
     },
     {
-      "id": "gate",
-      "score": 89,
-      "tag": "feed"
+      "id": "boot",
+      "score": 55,
+      "tag": "rotation"
     }
   ]
 }
