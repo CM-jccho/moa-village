@@ -1,44 +1,46 @@
 {
-  "generated_at": "2026-11-21T15:18:19Z",
-  "hour_label": "2026-11-22T00",
-  "source": "rotation",
+  "generated_at": "2026-11-21T21:37:13Z",
+  "hour_label": "2026-11-22T06",
+  "source": "google-trends-rss+rotation",
   "feeds_read": 2,
   "feed_sample": [
-    "첼시 대 리즈 유나이티드",
-    "ai 버블",
-    "우니온 베를린 대 라이프치히",
-    "그것이 알고싶다",
-    "tvn"
+    "배추",
+    "real madrid vs celta",
+    "알렉산더 즈베레프",
+    "베냐민 네타냐후",
+    "1박 2일"
   ],
-  "keywords": [],
+  "keywords": [
+    "레알 마드리드 대 셀타 비고"
+  ],
   "items": [
     {
-      "id": "flower",
-      "score": 84,
-      "tag": "rotation"
+      "id": "well",
+      "score": 98,
+      "tag": "feed"
+    },
+    {
+      "id": "boot",
+      "score": 94,
+      "tag": "feed"
     },
     {
       "id": "mushroom",
-      "score": 78,
-      "tag": "rotation"
+      "score": 91,
+      "tag": "feed"
     },
     {
-      "id": "gbell",
-      "score": 72,
-      "tag": "rotation"
-    },
-    {
-      "id": "crystal",
+      "id": "bell",
       "score": 66,
       "tag": "rotation"
     },
     {
-      "id": "kite",
+      "id": "gbell",
       "score": 60,
       "tag": "rotation"
     },
     {
-      "id": "flag",
+      "id": "crystal",
       "score": 55,
       "tag": "rotation"
     }
