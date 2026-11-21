@@ -1,46 +1,44 @@
 {
-  "generated_at": "2026-11-20T23:57:56Z",
-  "hour_label": "2026-11-21T08",
-  "source": "google-trends-rss+rotation",
+  "generated_at": "2026-11-21T06:57:51Z",
+  "hour_label": "2026-11-21T15",
+  "source": "rotation",
   "feeds_read": 2,
   "feed_sample": [
-    "mu",
-    "경찰관",
-    "nvda",
-    "한국항공우주산업",
-    "연예인"
+    "손정의",
+    "카타르 축구 국가대표팀",
+    "마피아42",
+    "후티",
+    "콜레라"
   ],
-  "keywords": [
-    "연예인"
-  ],
+  "keywords": [],
   "items": [
     {
-      "id": "kite",
-      "score": 98,
-      "tag": "feed"
+      "id": "bell",
+      "score": 84,
+      "tag": "rotation"
     },
     {
-      "id": "crystal",
+      "id": "deer",
       "score": 78,
       "tag": "rotation"
     },
     {
-      "id": "bench",
+      "id": "wreath",
       "score": 72,
       "tag": "rotation"
     },
     {
-      "id": "fence",
+      "id": "bench",
       "score": 66,
       "tag": "rotation"
     },
     {
-      "id": "bell",
+      "id": "snowman",
       "score": 60,
       "tag": "rotation"
     },
     {
-      "id": "candy",
+      "id": "mushroom",
       "score": 55,
       "tag": "rotation"
     }
