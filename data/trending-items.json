@@ -1,44 +1,46 @@
 {
-  "generated_at": "2026-11-22T09:42:17Z",
-  "hour_label": "2026-11-22T18",
-  "source": "rotation",
+  "generated_at": "2026-11-22T17:47:32Z",
+  "hour_label": "2026-11-23T02",
+  "source": "google-trends-rss+rotation",
   "feeds_read": 2,
   "feed_sample": [
-    "기온",
-    "노동자",
-    "정부",
-    "코스닥",
-    "검은 월요일"
+    "liverpool đấu với man utd",
+    "맨유",
+    "빗썸",
+    "라싱 산탄데르 대 레알 소시에다드",
+    "ลิเวอร์พูล พบ แมนยู"
   ],
-  "keywords": [],
+  "keywords": [
+    "new york yankees catcher trade"
+  ],
   "items": [
     {
-      "id": "fox",
-      "score": 84,
-      "tag": "rotation"
+      "id": "bench",
+      "score": 98,
+      "tag": "feed"
     },
     {
-      "id": "crystal",
-      "score": 78,
-      "tag": "rotation"
+      "id": "lamp",
+      "score": 93,
+      "tag": "feed"
     },
     {
-      "id": "kite",
+      "id": "candy",
       "score": 72,
       "tag": "rotation"
     },
     {
-      "id": "candy",
+      "id": "mushroom",
       "score": 66,
       "tag": "rotation"
     },
     {
-      "id": "gate",
+      "id": "star",
       "score": 60,
       "tag": "rotation"
     },
     {
-      "id": "snowglobe",
+      "id": "deer",
       "score": 55,
       "tag": "rotation"
     }
