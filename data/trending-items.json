@@ -1,46 +1,44 @@
 {
-  "generated_at": "2026-11-22T02:10:26Z",
-  "hour_label": "2026-11-22T11",
-  "source": "google-trends-rss+rotation",
+  "generated_at": "2026-11-22T09:42:17Z",
+  "hour_label": "2026-11-22T18",
+  "source": "rotation",
   "feeds_read": 2,
   "feed_sample": [
-    "도경완",
-    "담보 대출",
-    "김호영",
-    "마마 어워즈",
-    "나경원"
+    "기온",
+    "노동자",
+    "정부",
+    "코스닥",
+    "검은 월요일"
   ],
-  "keywords": [
-    "seatac ice arrest"
-  ],
+  "keywords": [],
   "items": [
     {
-      "id": "flag",
-      "score": 98,
-      "tag": "feed"
+      "id": "fox",
+      "score": 84,
+      "tag": "rotation"
     },
     {
-      "id": "lamp",
-      "score": 94,
-      "tag": "feed"
+      "id": "crystal",
+      "score": 78,
+      "tag": "rotation"
     },
     {
-      "id": "bench",
-      "score": 90,
-      "tag": "feed"
+      "id": "kite",
+      "score": 72,
+      "tag": "rotation"
     },
     {
-      "id": "star",
+      "id": "candy",
       "score": 66,
       "tag": "rotation"
     },
     {
-      "id": "flower",
+      "id": "gate",
       "score": 60,
       "tag": "rotation"
     },
     {
-      "id": "gift",
+      "id": "snowglobe",
       "score": 55,
       "tag": "rotation"
     }
