@@ -1,46 +1,46 @@
 {
-  "generated_at": "2026-11-22T17:47:32Z",
-  "hour_label": "2026-11-23T02",
+  "generated_at": "2026-11-22T23:34:15Z",
+  "hour_label": "2026-11-23T08",
   "source": "google-trends-rss+rotation",
   "feeds_read": 2,
   "feed_sample": [
-    "liverpool đấu với man utd",
-    "맨유",
-    "빗썸",
-    "라싱 산탄데르 대 레알 소시에다드",
-    "ลิเวอร์พูล พบ แมนยู"
+    "로스앤젤레스 fc",
+    "노시환",
+    "김호령",
+    "쟁의행위",
+    "thứ hạng của barcelona gặp villarreal"
   ],
   "keywords": [
-    "new york yankees catcher trade"
+    "penguins vs stars"
   ],
   "items": [
     {
-      "id": "bench",
+      "id": "star",
       "score": 98,
       "tag": "feed"
     },
     {
-      "id": "lamp",
+      "id": "deer",
       "score": 93,
       "tag": "feed"
     },
     {
-      "id": "candy",
-      "score": 72,
-      "tag": "rotation"
+      "id": "kite",
+      "score": 89,
+      "tag": "feed"
     },
     {
-      "id": "mushroom",
+      "id": "bench",
       "score": 66,
       "tag": "rotation"
     },
     {
-      "id": "star",
+      "id": "wreath",
       "score": 60,
       "tag": "rotation"
     },
     {
-      "id": "deer",
+      "id": "flower",
       "score": 55,
       "tag": "rotation"
     }
