@@ -1,46 +1,46 @@
 {
-  "generated_at": "2026-11-21T21:37:13Z",
-  "hour_label": "2026-11-22T06",
+  "generated_at": "2026-11-22T02:10:26Z",
+  "hour_label": "2026-11-22T11",
   "source": "google-trends-rss+rotation",
   "feeds_read": 2,
   "feed_sample": [
-    "배추",
-    "real madrid vs celta",
-    "알렉산더 즈베레프",
-    "베냐민 네타냐후",
-    "1박 2일"
+    "도경완",
+    "담보 대출",
+    "김호영",
+    "마마 어워즈",
+    "나경원"
   ],
   "keywords": [
-    "레알 마드리드 대 셀타 비고"
+    "seatac ice arrest"
   ],
   "items": [
     {
-      "id": "well",
+      "id": "flag",
       "score": 98,
       "tag": "feed"
     },
     {
-      "id": "boot",
+      "id": "lamp",
       "score": 94,
       "tag": "feed"
     },
     {
-      "id": "mushroom",
-      "score": 91,
+      "id": "bench",
+      "score": 90,
       "tag": "feed"
     },
     {
-      "id": "bell",
+      "id": "star",
       "score": 66,
       "tag": "rotation"
     },
     {
-      "id": "gbell",
+      "id": "flower",
       "score": 60,
       "tag": "rotation"
     },
     {
-      "id": "crystal",
+      "id": "gift",
       "score": 55,
       "tag": "rotation"
     }
