@@ -1,46 +1,44 @@
 {
-  "generated_at": "2026-11-23T07:26:43Z",
-  "hour_label": "2026-11-23T16",
-  "source": "google-trends-rss+rotation",
+  "generated_at": "2026-11-23T20:06:39Z",
+  "hour_label": "2026-11-24T05",
+  "source": "rotation",
   "feeds_read": 2,
   "feed_sample": [
-    "휴림로봇",
-    "권한쟁의심판",
-    "박선원",
-    "하프마라톤",
-    "한덕수"
+    "브뢴뷔 대 미트윌란",
+    "리플",
+    "탁구",
+    "노태문",
+    "sk그룹"
   ],
-  "keywords": [
-    "트리플스타"
-  ],
+  "keywords": [],
   "items": [
     {
-      "id": "pine",
-      "score": 98,
-      "tag": "feed"
-    },
-    {
-      "id": "star",
-      "score": 94,
-      "tag": "feed"
-    },
-    {
-      "id": "gbell",
-      "score": 91,
-      "tag": "feed"
-    },
-    {
-      "id": "windmill",
-      "score": 66,
-      "tag": "rotation"
-    },
-    {
-      "id": "carousel",
-      "score": 60,
+      "id": "lamp",
+      "score": 84,
       "tag": "rotation"
     },
     {
       "id": "snowman",
+      "score": 78,
+      "tag": "rotation"
+    },
+    {
+      "id": "kite",
+      "score": 72,
+      "tag": "rotation"
+    },
+    {
+      "id": "well",
+      "score": 66,
+      "tag": "rotation"
+    },
+    {
+      "id": "gbell",
+      "score": 60,
+      "tag": "rotation"
+    },
+    {
+      "id": "mushroom",
       "score": 55,
       "tag": "rotation"
     }
