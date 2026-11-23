@@ -1,46 +1,46 @@
 {
-  "generated_at": "2026-11-22T23:34:15Z",
-  "hour_label": "2026-11-23T08",
+  "generated_at": "2026-11-23T07:26:43Z",
+  "hour_label": "2026-11-23T16",
   "source": "google-trends-rss+rotation",
   "feeds_read": 2,
   "feed_sample": [
-    "로스앤젤레스 fc",
-    "노시환",
-    "김호령",
-    "쟁의행위",
-    "thứ hạng của barcelona gặp villarreal"
+    "휴림로봇",
+    "권한쟁의심판",
+    "박선원",
+    "하프마라톤",
+    "한덕수"
   ],
   "keywords": [
-    "penguins vs stars"
+    "트리플스타"
   ],
   "items": [
     {
-      "id": "star",
+      "id": "pine",
       "score": 98,
       "tag": "feed"
     },
     {
-      "id": "deer",
-      "score": 93,
+      "id": "star",
+      "score": 94,
       "tag": "feed"
     },
     {
-      "id": "kite",
-      "score": 89,
+      "id": "gbell",
+      "score": 91,
       "tag": "feed"
     },
     {
-      "id": "bench",
+      "id": "windmill",
       "score": 66,
       "tag": "rotation"
     },
     {
-      "id": "wreath",
+      "id": "carousel",
       "score": 60,
       "tag": "rotation"
     },
     {
-      "id": "flower",
+      "id": "snowman",
       "score": 55,
       "tag": "rotation"
     }
