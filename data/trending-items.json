@@ -1,44 +1,44 @@
 {
-  "generated_at": "2026-11-23T20:06:39Z",
-  "hour_label": "2026-11-24T05",
+  "generated_at": "2026-11-24T04:44:02Z",
+  "hour_label": "2026-11-24T13",
   "source": "rotation",
   "feeds_read": 2,
   "feed_sample": [
-    "브뢴뷔 대 미트윌란",
-    "리플",
-    "탁구",
-    "노태문",
-    "sk그룹"
+    "손흥민",
+    "대전 서남부 종합스포츠타운",
+    "그랜드 테프트 오토 vi",
+    "12월 3일",
+    "중고"
   ],
   "keywords": [],
   "items": [
     {
-      "id": "lamp",
+      "id": "fence",
       "score": 84,
       "tag": "rotation"
     },
     {
-      "id": "snowman",
+      "id": "snowglobe",
       "score": 78,
       "tag": "rotation"
     },
     {
-      "id": "kite",
+      "id": "aurora",
       "score": 72,
       "tag": "rotation"
     },
     {
-      "id": "well",
+      "id": "wreath",
       "score": 66,
       "tag": "rotation"
     },
     {
-      "id": "gbell",
+      "id": "gate",
       "score": 60,
       "tag": "rotation"
     },
     {
-      "id": "mushroom",
+      "id": "flower",
       "score": 55,
       "tag": "rotation"
     }
