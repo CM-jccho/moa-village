@@ -1,36 +1,36 @@
 {
-  "generated_at": "2026-11-25T09:47:26Z",
-  "hour_label": "2026-11-25T18",
+  "generated_at": "2026-11-25T19:53:18Z",
+  "hour_label": "2026-11-26T04",
   "source": "google-trends-rss+rotation",
   "feeds_read": 2,
   "feed_sample": [
-    "국민연금공단",
-    "태국",
-    "검찰청",
-    "루카 윌리엄스 바넷",
-    "lta"
+    "삼성전기",
+    "다나와",
+    "바르셀로나",
+    "sabah vs barcelona",
+    "sabah 대 바르셀로나"
   ],
   "keywords": [
-    "국민연금공단"
+    "데이비스컵"
   ],
   "items": [
     {
-      "id": "kite",
+      "id": "well",
       "score": 98,
       "tag": "feed"
     },
     {
       "id": "boot",
-      "score": 78,
-      "tag": "rotation"
+      "score": 94,
+      "tag": "feed"
     },
     {
-      "id": "gate",
-      "score": 72,
-      "tag": "rotation"
+      "id": "mushroom",
+      "score": 91,
+      "tag": "feed"
     },
     {
-      "id": "fence",
+      "id": "windmill",
       "score": 66,
       "tag": "rotation"
     },
@@ -40,7 +40,7 @@
       "tag": "rotation"
     },
     {
-      "id": "wreath",
+      "id": "fence",
       "score": 55,
       "tag": "rotation"
     }
