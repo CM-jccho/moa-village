@@ -1,42 +1,41 @@
 {
-  "generated_at": "2026-11-25T00:36:49Z",
-  "hour_label": "2026-11-25T09",
+  "generated_at": "2026-11-25T09:47:26Z",
+  "hour_label": "2026-11-25T18",
   "source": "google-trends-rss+rotation",
   "feeds_read": 2,
   "feed_sample": [
-    "빅테크",
-    "주주",
-    "온도",
-    "윤이나",
-    "김혜성"
+    "국민연금공단",
+    "태국",
+    "검찰청",
+    "루카 윌리엄스 바넷",
+    "lta"
   ],
   "keywords": [
-    "golden knights vs oilers",
-    "nba starting lineups"
+    "국민연금공단"
   ],
   "items": [
     {
-      "id": "lamp",
+      "id": "kite",
       "score": 98,
       "tag": "feed"
     },
     {
-      "id": "star",
-      "score": 94,
-      "tag": "feed"
+      "id": "boot",
+      "score": 78,
+      "tag": "rotation"
     },
     {
       "id": "gate",
-      "score": 94,
-      "tag": "feed"
+      "score": 72,
+      "tag": "rotation"
     },
     {
-      "id": "deer",
-      "score": 91,
-      "tag": "feed"
+      "id": "fence",
+      "score": 66,
+      "tag": "rotation"
     },
     {
-      "id": "bench",
+      "id": "star",
       "score": 60,
       "tag": "rotation"
     },
