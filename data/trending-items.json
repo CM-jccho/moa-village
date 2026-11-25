@@ -1,46 +1,47 @@
 {
-  "generated_at": "2026-11-24T15:47:39Z",
-  "hour_label": "2026-11-25T00",
+  "generated_at": "2026-11-25T00:36:49Z",
+  "hour_label": "2026-11-25T09",
   "source": "google-trends-rss+rotation",
   "feeds_read": 2,
   "feed_sample": [
-    "시그널2",
-    "주진우",
-    "황영묵",
-    "추성훈 은퇴전",
-    "미국 상품거래위원회"
+    "빅테크",
+    "주주",
+    "온도",
+    "윤이나",
+    "김혜성"
   ],
   "keywords": [
-    "꽁안 하노이 fc 대 비셀 고베"
+    "golden knights vs oilers",
+    "nba starting lineups"
   ],
   "items": [
     {
-      "id": "well",
+      "id": "lamp",
       "score": 98,
       "tag": "feed"
     },
     {
-      "id": "boot",
-      "score": 95,
+      "id": "star",
+      "score": 94,
       "tag": "feed"
     },
     {
-      "id": "mushroom",
-      "score": 92,
+      "id": "gate",
+      "score": 94,
+      "tag": "feed"
+    },
+    {
+      "id": "deer",
+      "score": 91,
       "tag": "feed"
     },
     {
       "id": "bench",
-      "score": 66,
-      "tag": "rotation"
-    },
-    {
-      "id": "windmill",
       "score": 60,
       "tag": "rotation"
     },
     {
-      "id": "carousel",
+      "id": "wreath",
       "score": 55,
       "tag": "rotation"
     }
