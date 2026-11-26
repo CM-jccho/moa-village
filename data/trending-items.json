@@ -1,46 +1,44 @@
 {
-  "generated_at": "2026-11-25T19:53:18Z",
-  "hour_label": "2026-11-26T04",
-  "source": "google-trends-rss+rotation",
+  "generated_at": "2026-11-26T02:46:34Z",
+  "hour_label": "2026-11-26T11",
+  "source": "rotation",
   "feeds_read": 2,
   "feed_sample": [
-    "삼성전기",
-    "다나와",
-    "바르셀로나",
-    "sabah vs barcelona",
-    "sabah 대 바르셀로나"
+    "전기자동차 배터리",
+    "삼성",
+    "호랑이",
+    "초전마을",
+    "수험"
   ],
-  "keywords": [
-    "데이비스컵"
-  ],
+  "keywords": [],
   "items": [
     {
       "id": "well",
-      "score": 98,
-      "tag": "feed"
-    },
-    {
-      "id": "boot",
-      "score": 94,
-      "tag": "feed"
-    },
-    {
-      "id": "mushroom",
-      "score": 91,
-      "tag": "feed"
-    },
-    {
-      "id": "windmill",
-      "score": 66,
+      "score": 84,
       "tag": "rotation"
     },
     {
-      "id": "star",
-      "score": 60,
+      "id": "snowglobe",
+      "score": 78,
+      "tag": "rotation"
+    },
+    {
+      "id": "aurora",
+      "score": 72,
       "tag": "rotation"
     },
     {
       "id": "fence",
+      "score": 66,
+      "tag": "rotation"
+    },
+    {
+      "id": "bench",
+      "score": 60,
+      "tag": "rotation"
+    },
+    {
+      "id": "wreath",
       "score": 55,
       "tag": "rotation"
     }
