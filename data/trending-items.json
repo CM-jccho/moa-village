@@ -1,44 +1,47 @@
 {
-  "generated_at": "2026-11-26T02:46:34Z",
-  "hour_label": "2026-11-26T11",
-  "source": "rotation",
+  "generated_at": "2026-11-26T12:18:27Z",
+  "hour_label": "2026-11-26T21",
+  "source": "google-trends-rss+rotation",
   "feeds_read": 2,
   "feed_sample": [
-    "전기자동차 배터리",
-    "삼성",
-    "호랑이",
-    "초전마을",
-    "수험"
+    "두산타워",
+    "근로장려금 신청",
+    "슈퍼문",
+    "이지훈",
+    "한국보건의료인국가시험원"
   ],
-  "keywords": [],
+  "keywords": [
+    "두산타워",
+    "northampton catasauqua thanksgiving game postponed"
+  ],
   "items": [
     {
-      "id": "well",
-      "score": 84,
-      "tag": "rotation"
+      "id": "gift",
+      "score": 98,
+      "tag": "feed"
     },
     {
-      "id": "snowglobe",
-      "score": 78,
-      "tag": "rotation"
+      "id": "bell",
+      "score": 95,
+      "tag": "feed"
     },
     {
-      "id": "aurora",
-      "score": 72,
-      "tag": "rotation"
-    },
-    {
-      "id": "fence",
-      "score": 66,
-      "tag": "rotation"
+      "id": "snowman",
+      "score": 92,
+      "tag": "feed"
     },
     {
       "id": "bench",
+      "score": 87,
+      "tag": "feed"
+    },
+    {
+      "id": "flower",
       "score": 60,
       "tag": "rotation"
     },
     {
-      "id": "wreath",
+      "id": "kite",
       "score": 55,
       "tag": "rotation"
     }
