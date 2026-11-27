@@ -1,44 +1,44 @@
 {
-  "generated_at": "2026-11-27T04:58:03Z",
-  "hour_label": "2026-11-27T13",
+  "generated_at": "2026-11-27T14:58:05Z",
+  "hour_label": "2026-11-27T23",
   "source": "rotation",
   "feeds_read": 2,
   "feed_sample": [
-    "상선",
-    "강시 후",
-    "수학자",
-    "맨체스터 시티 fc",
-    "낸시랭"
+    "강지영",
+    "굿파트너2",
+    "명서현",
+    "박정수",
+    "멸망전"
   ],
   "keywords": [],
   "items": [
     {
-      "id": "candy",
+      "id": "pine",
       "score": 84,
       "tag": "rotation"
     },
     {
-      "id": "star",
+      "id": "carousel",
       "score": 78,
       "tag": "rotation"
     },
     {
-      "id": "windmill",
+      "id": "flag",
       "score": 72,
       "tag": "rotation"
     },
     {
-      "id": "aurora",
+      "id": "lamp",
       "score": 66,
       "tag": "rotation"
     },
     {
-      "id": "bell",
+      "id": "snowglobe",
       "score": 60,
       "tag": "rotation"
     },
     {
-      "id": "boot",
+      "id": "gift",
       "score": 55,
       "tag": "rotation"
     }
