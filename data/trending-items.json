@@ -1,44 +1,44 @@
 {
-  "generated_at": "2026-11-27T14:58:05Z",
-  "hour_label": "2026-11-27T23",
+  "generated_at": "2026-11-27T23:24:39Z",
+  "hour_label": "2026-11-28T08",
   "source": "rotation",
   "feeds_read": 2,
   "feed_sample": [
-    "강지영",
-    "굿파트너2",
-    "명서현",
-    "박정수",
-    "멸망전"
+    "김정화",
+    "보편적 기본소득",
+    "위암",
+    "이승엽",
+    "s&p 500"
   ],
   "keywords": [],
   "items": [
     {
-      "id": "pine",
+      "id": "crystal",
       "score": 84,
       "tag": "rotation"
     },
     {
-      "id": "carousel",
+      "id": "aurora",
       "score": 78,
       "tag": "rotation"
     },
     {
-      "id": "flag",
+      "id": "gate",
       "score": 72,
       "tag": "rotation"
     },
     {
-      "id": "lamp",
+      "id": "flower",
       "score": 66,
       "tag": "rotation"
     },
     {
-      "id": "snowglobe",
+      "id": "well",
       "score": 60,
       "tag": "rotation"
     },
     {
-      "id": "gift",
+      "id": "deer",
       "score": 55,
       "tag": "rotation"
     }
