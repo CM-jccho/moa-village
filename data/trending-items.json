@@ -1,44 +1,44 @@
 {
-  "generated_at": "2026-11-26T22:16:45Z",
-  "hour_label": "2026-11-27T07",
+  "generated_at": "2026-11-27T04:58:03Z",
+  "hour_label": "2026-11-27T13",
   "source": "rotation",
   "feeds_read": 2,
   "feed_sample": [
-    "삼성자산운용",
-    "정년",
-    "광명시",
-    "정부 예산",
-    "마이클세일러"
+    "상선",
+    "강시 후",
+    "수학자",
+    "맨체스터 시티 fc",
+    "낸시랭"
   ],
   "keywords": [],
   "items": [
     {
-      "id": "windmill",
+      "id": "candy",
       "score": 84,
       "tag": "rotation"
     },
     {
-      "id": "carousel",
+      "id": "star",
       "score": 78,
       "tag": "rotation"
     },
     {
-      "id": "flag",
+      "id": "windmill",
       "score": 72,
       "tag": "rotation"
     },
     {
-      "id": "snowglobe",
+      "id": "aurora",
       "score": 66,
       "tag": "rotation"
     },
     {
-      "id": "fox",
+      "id": "bell",
       "score": 60,
       "tag": "rotation"
     },
     {
-      "id": "flower",
+      "id": "boot",
       "score": 55,
       "tag": "rotation"
     }
