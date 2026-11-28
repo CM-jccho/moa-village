@@ -1,44 +1,46 @@
 {
-  "generated_at": "2026-11-27T23:24:39Z",
-  "hour_label": "2026-11-28T08",
-  "source": "rotation",
+  "generated_at": "2026-11-28T07:38:27Z",
+  "hour_label": "2026-11-28T16",
+  "source": "google-trends-rss+rotation",
   "feeds_read": 2,
   "feed_sample": [
-    "김정화",
-    "보편적 기본소득",
-    "위암",
-    "이승엽",
-    "s&p 500"
+    "매매",
+    "사고",
+    "한남동",
+    "신민아",
+    "루친스키"
   ],
-  "keywords": [],
+  "keywords": [
+    "beach hazards statement"
+  ],
   "items": [
     {
-      "id": "crystal",
-      "score": 84,
-      "tag": "rotation"
+      "id": "flag",
+      "score": 98,
+      "tag": "feed"
     },
     {
-      "id": "aurora",
-      "score": 78,
-      "tag": "rotation"
+      "id": "lamp",
+      "score": 94,
+      "tag": "feed"
     },
     {
-      "id": "gate",
-      "score": 72,
-      "tag": "rotation"
+      "id": "bench",
+      "score": 91,
+      "tag": "feed"
     },
     {
-      "id": "flower",
+      "id": "kite",
       "score": 66,
       "tag": "rotation"
     },
     {
-      "id": "well",
+      "id": "gate",
       "score": 60,
       "tag": "rotation"
     },
     {
-      "id": "deer",
+      "id": "fox",
       "score": 55,
       "tag": "rotation"
     }
